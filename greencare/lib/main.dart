@@ -12,10 +12,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        scaffoldBackgroundColor: Color(0xffD5EBFD), //<-- SEE HERE
-      ),
       home: Welcome(),
+      theme: ThemeData(
+        inputDecorationTheme: const InputDecorationTheme(
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xff72AC45))),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+          border: UnderlineInputBorder(
+            borderSide: BorderSide(color: Color(0xff72AC45)),
+          ),
+        ),
+      ),
       debugShowCheckedModeBanner: false,
     );
   }

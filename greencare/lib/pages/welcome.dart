@@ -17,7 +17,7 @@ class Welcome extends StatelessWidget {
           stops: [2.0, 1.0],
           tileMode: TileMode.clamp,
           colors: [
-            Color(0xff2C6748),
+            Color(0xff1C6946),
             Color(0xff00DD73),
           ],
         )),
