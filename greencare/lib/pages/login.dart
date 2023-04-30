@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:greencare/pages/home.dart';
 import 'package:greencare/pages/register.dart';
+import 'package:greencare/pages/resetpassword.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -102,6 +104,7 @@ class _LoginState extends State<Login> {
                         Positioned(
                             top: 115,
                             left: 15,
+                            right: 15,
                             child: Column(
                               children: [
                                 Row(
@@ -138,7 +141,7 @@ class _LoginState extends State<Login> {
                                           child: Padding(
                                             padding:
                                                 EdgeInsets.only(bottom: 20.0),
-                                            child: Text("ยังไม่มีบัญชี ?",
+                                            child: Text("ยังไม่มีบัญชี",
                                                 style: TextStyle(
                                                     color: Colors.grey,
                                                     fontSize: 13)),
@@ -157,9 +160,9 @@ class _LoginState extends State<Login> {
                                           alignment: Alignment.bottomCenter,
                                           child: Padding(
                                             padding: EdgeInsets.fromLTRB(
-                                                95, 0, 0, 20),
+                                                155, 0, 0, 20),
                                             child: Text(
-                                              "ลืมรหัสผ่าน ?",
+                                              "ลืมรหัสผ่าน",
                                               style: TextStyle(
                                                   color: Colors.grey,
                                                   fontSize: 13),
@@ -171,7 +174,7 @@ class _LoginState extends State<Login> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const Register()),
+                                                    const ResetPassword()),
                                           );
                                         }),
                                   ],
@@ -182,7 +185,13 @@ class _LoginState extends State<Login> {
                           bottom: 20,
                           right: 100,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Home()),
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xff72AC45),
                                 fixedSize: const Size(120, 40),

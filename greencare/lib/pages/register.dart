@@ -28,7 +28,7 @@ class Register extends StatelessWidget {
                           alignment: Alignment.bottomRight,
                           child: Image.asset(
                             'assets/smartfarm2.png',
-                            width: 210,
+                            width: 220,
                             height: 150,
                           ),
                         ),
@@ -58,7 +58,7 @@ class Register extends StatelessWidget {
                     ],
                   ),
                   Container(
-                    height: 500,
+                    height: 480,
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius:
@@ -230,7 +230,7 @@ class Register extends StatelessWidget {
                                             padding:
                                                 EdgeInsets.only(bottom: 20.0),
                                             child: Text(
-                                              "เข้าสู่ระบบ ?",
+                                              "เข้าสู่ระบบ ",
                                               style: TextStyle(
                                                   color: Colors.grey,
                                                   fontSize: 13),
@@ -251,7 +251,7 @@ class Register extends StatelessWidget {
                             )),
                         Positioned(
                           bottom: 20,
-                          right: 110,
+                          right: 100,
                           child: ElevatedButton(
                             onPressed: () {},
                             style: ElevatedButton.styleFrom(
@@ -259,7 +259,7 @@ class Register extends StatelessWidget {
                                 fixedSize: const Size(120, 40),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(50))),
-                            child: const Text('Login'),
+                            child: const Text('สมัครบัญชี'),
                           ),
                         ),
                       ],
