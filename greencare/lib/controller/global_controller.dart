@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:greencare/api/fetch_weather.dart';
+import 'package:greencare/model/weather_data.dart';
 
 class GlobalController extends GetxController {
   final RxBool _isLoading = true.obs;
@@ -7,8 +9,14 @@ class GlobalController extends GetxController {
   final RxDouble _longitude = 0.0.obs;
 
   RxBool checkLoading() => _isLoading;
-  RxDouble getLattitude() => _latitude;
+  RxDouble getLatitude() => _latitude;
   RxDouble getLongitude() => _longitude;
+
+  final weatherData = WeatherData().obs;
+
+  WeatherData getData() {
+    return weatherData.value;
+  }
 
   @override
   void onInit() {
@@ -41,6 +49,14 @@ class GlobalController extends GetxController {
       _latitude.value = value.latitude;
       _longitude.value = value.longitude;
       _isLoading.value = false;
+      // print(_latitude.value);
+      // print(_longitude.value);
+      return FetchWeatherAPI()
+          .processData(value.latitude, value.longitude)
+          .then((value) {
+        weatherData.value = value;
+        _isLoading.value = false;
+      });
     });
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:greencare/controller/global_controller.dart';
+import 'package:greencare/widgets/current_weather_widget.dart';
 import 'package:greencare/widgets/header_widgets.dart';
 
 class Home extends StatefulWidget {
@@ -13,19 +14,28 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final GlobalController globalController =
       Get.put(GlobalController(), permanent: true);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Obx(
           () => globalController.checkLoading().isTrue
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : ListView(
                   scrollDirection: Axis.vertical,
                   children: [
-                    HeaderWidget(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    const HeaderWidget(),
+                    //for our current temp ('current')
+                    CurrentWeatherWidget(
+                      weatherDataCurrent:
+                          globalController.getData().getCurrentWeather(),
+                    ),
                   ],
                 ),
         ),
