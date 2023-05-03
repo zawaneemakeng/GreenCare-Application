@@ -24,19 +24,21 @@ class _HomeState extends State<Home> {
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : ListView(
-                  scrollDirection: Axis.vertical,
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    const HeaderWidget(),
-                    //for our current temp ('current')
-                    CurrentWeatherWidget(
-                      weatherDataCurrent:
-                          globalController.getData().getCurrentWeather(),
-                    ),
-                  ],
+              : Center(
+                  child: ListView(
+                    scrollDirection: Axis.vertical,
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const HeaderWidget(),
+                      //for our current temp ('current')
+                      CurrentWeatherWidget(
+                        weatherDataCurrent:
+                            globalController.getData().getCurrentWeather(),
+                      ),
+                    ],
+                  ),
                 ),
         ),
       ),

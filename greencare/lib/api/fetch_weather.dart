@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:greencare/api/api_key.dart';
 import 'package:greencare/model/weather_data.dart';
+import 'package:greencare/utils/api_url.dart';
 import 'package:http/http.dart' as http;
 import 'package:greencare/model/weather_data_current.dart';
 
@@ -14,13 +15,5 @@ class FetchWeatherAPI {
     weatherData = WeatherData(WeatherDataCurrent.fromJson(jsonString));
 
     return weatherData!;
-  }
-
-  String apiURL(var lat, var lon) {
-    String url;
-    url =
-        "https://api.openweathermap.org/data/3.0/onecall?lat=$lat&lon=$lon&appid=$apiKey&units=metric&exclude=minutely";
-
-    return url;
   }
 }
