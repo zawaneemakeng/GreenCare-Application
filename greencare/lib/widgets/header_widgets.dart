@@ -19,7 +19,7 @@ class HeaderWidget extends StatefulWidget {
 
 class _HeaderWidgetState extends State<HeaderWidget> {
   String city = "";
-  String date = DateFormat('EEEdMMM').format(DateTime.now());
+  String date = DateFormat('EEEdMMM', 'th_TH').format(DateTime.now());
 
   final GlobalController globalController =
       Get.put(GlobalController(), permanent: true);

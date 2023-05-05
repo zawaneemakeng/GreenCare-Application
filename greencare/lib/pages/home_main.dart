@@ -5,6 +5,7 @@ import 'package:greencare/model/weather/hourly.dart';
 import 'package:greencare/widgets/current_weather_widget.dart';
 import 'package:greencare/widgets/header_widgets.dart';
 import 'package:greencare/widgets/hourly_weather_widget.dart';
+import 'package:greencare/widgets/water_level.dart';
 
 class HomeMain extends StatefulWidget {
   const HomeMain({super.key});
@@ -44,7 +45,8 @@ class _HomeMainState extends State<HomeMain> {
                       ),
                       HourlyDataWidget(
                           weatherDataHourly:
-                              globalController.getData().getHourlyWeather())
+                              globalController.getData().getHourlyWeather()),
+                      WaterLevel()
                     ],
                   ),
                 ),

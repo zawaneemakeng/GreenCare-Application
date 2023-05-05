@@ -34,7 +34,7 @@ class HourlyDataWidget extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10, top: 10),
       child: ListView.builder(
         scrollDirection: Axis.horizontal, //เเนวตั้ง
-        itemCount: weatherDataHourly.hourly.length > 12
+        itemCount: weatherDataHourly.hourly.length + 1 > 12
             ? 12
             : weatherDataHourly.hourly.length,
         itemBuilder: (context, index) {

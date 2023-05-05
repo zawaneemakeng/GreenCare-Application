@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'pages/welcome.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 void main() {
+  Intl.defaultLocale = 'th';
   runApp(const MyApp());
 }
 
