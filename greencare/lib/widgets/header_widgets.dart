@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
-
 import 'package:greencare/controller/global_controller.dart';
 import 'package:get/get.dart';
-
 import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -19,7 +17,9 @@ class HeaderWidget extends StatefulWidget {
 
 class _HeaderWidgetState extends State<HeaderWidget> {
   String city = "";
-  String date = DateFormat('EEEdMMM', 'th_TH').format(DateTime.now());
+  String date = DateFormat(
+    'EEEdMMM',
+  ).format(DateTime.now());
 
   final GlobalController globalController =
       Get.put(GlobalController(), permanent: true);

@@ -46,7 +46,7 @@ class _HomeMainState extends State<HomeMain> {
                       HourlyDataWidget(
                           weatherDataHourly:
                               globalController.getData().getHourlyWeather()),
-                      WaterLevel()
+                      //WaterLevel()
                     ],
                   ),
                 ),
