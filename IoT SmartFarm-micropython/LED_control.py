@@ -59,7 +59,7 @@ html_on = '''
   <div class="container">
   <form>
     <center>
-      <img src="https://raw.githubusercontent.com/UncleEngineer/MicroPython-IoT/main/light-bulb-on.png" width="300">
+      <img src="https://img.icons8.com/?size=512&id=30123&format=png" width="300">
      <h3>LED 1</h3>
           <button  class="btn btn-primary" name="LED" value="ON" type="submit">ON</button>&nbsp;
         <button  class="btn btn-danger" name="LED" value="OFF" type="submit">OFF</button>
@@ -89,7 +89,7 @@ html_off = '''
   <div class="container">
   <form>
     <center>
-      <img src="https://img.icons8.com/?size=512&id=UZg_20c5bu5H&format=png" width="300">
+      <img src="https://img.icons8.com/?size=512&id=47532&format=png" width="300">
      <h3>LED 1</h3>
           <button  class="btn btn-primary" name="LED" value="ON" type="submit">ON</button>&nbsp;
         <button  class="btn btn-danger" name="LED" value="OFF" type="submit">OFF</button>
