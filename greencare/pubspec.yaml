@@ -1,6 +1,5 @@
 name: greencare
 description: A new Flutter project.
-
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -20,7 +19,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.18.6 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,6 +30,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  geolocator: ^9.0.2
+  geocoding: ^2.1.0
+  sleek_circular_slider: ^2.0.1
+  http: ^0.13.6
+  get: ^4.5.0
+  intl: ^0.18.1
+  salomon_bottom_bar: ^3.3.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -39,13 +45,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  geolocator: ^9.0.1
-  geocoding: ^2.0.0
-  sleek_circular_slider: ^2.0.1
-  http: ^0.13.5
-  get: ^4.5.0
-  intl: ^0.18.1
-  liquid_progress_indicator: ^0.4.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -69,7 +68,6 @@ flutter:
     - assets/
     - assets/weather/
     - assets/icons/
-
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

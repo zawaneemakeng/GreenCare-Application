@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:greencare/pages/login.dart';
 
-class Welcome extends StatelessWidget {
-  const Welcome({Key? key}) : super(key: key);
+class WelcomePage extends StatelessWidget {
+  const WelcomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class Welcome extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.only(bottom: 20.0),
                       child: Text(
-                        "have an account? ",
+                        "มีบัญชีอยู่เเล้ว? ",
                         style: TextStyle(
                           fontSize: 18,
                           color: Color(0xfff5F2EB),
@@ -60,7 +60,7 @@ class Welcome extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Login()),
+                              builder: (context) => const LoginPage()),
                         );
                       }),
                 ],
@@ -110,7 +110,7 @@ class Welcome extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () {
                       Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (_) => const Login()));
+                          MaterialPageRoute(builder: (_) => const LoginPage()));
                     },
                     child: Container(
                       height: 50,

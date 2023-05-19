@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:greencare/pages/home.dart';
+import 'package:greencare/pages/home..dart';
 import 'package:greencare/pages/register.dart';
-import 'package:greencare/pages/resetpassword.dart';
+import 'package:greencare/pages/reset_password.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfff5F2EB),
+      backgroundColor: Colors.white,
       body: ListView(
         children: [
           Padding(
@@ -49,15 +49,16 @@ class _LoginState extends State<Login> {
                   Container(
                     height: 300,
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Colors.grey[100],
                         borderRadius:
                             const BorderRadius.all(Radius.circular(20)),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(.2),
-                            spreadRadius: 2,
-                            blurRadius: 20,
-                            offset: const Offset(0, 0),
+                            color:
+                                Color.fromARGB(255, 255, 255, 255).withAlpha(0),
+                            spreadRadius: 0,
+                            blurRadius: 5,
+                            offset: const Offset(0.5, 0),
                           )
                         ]),
                     child: Stack(
@@ -94,6 +95,7 @@ class _LoginState extends State<Login> {
                                             color: Color(0xff72AC45),
                                           ),
                                           hintText: 'example@gmail.com',
+                                          border: InputBorder.none,
                                         ),
                                       ),
                                     ),
@@ -152,7 +154,7 @@ class _LoginState extends State<Login> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const Register()),
+                                                    const RegisterPage()),
                                           );
                                         }),
                                     GestureDetector(
@@ -174,7 +176,7 @@ class _LoginState extends State<Login> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const ResetPassword()),
+                                                    const ResetPasswordPage()),
                                           );
                                         }),
                                   ],
@@ -189,7 +191,7 @@ class _LoginState extends State<Login> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const Home()),
+                                    builder: (context) => const HomePage()),
                               );
                             },
                             style: ElevatedButton.styleFrom(
@@ -197,7 +199,10 @@ class _LoginState extends State<Login> {
                                 fixedSize: const Size(120, 40),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(50))),
-                            child: const Text('Login'),
+                            child: const Text(
+                              'Login',
+                              style: TextStyle(color: Color(0xfff5F2EB)),
+                            ),
                           ),
                         ),
                       ],

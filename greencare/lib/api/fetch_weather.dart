@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:greencare/api/api_key.dart';
 import 'package:greencare/model/weather_data.dart';
 import 'package:greencare/model/weather_data_hourly.dart';
 import 'package:greencare/utils/api_url.dart';

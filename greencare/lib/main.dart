@@ -1,31 +1,23 @@
 import 'package:flutter/material.dart';
-import 'pages/welcome.dart';
-import 'package:get/get.dart';
+import 'package:greencare/pages/welcome.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       title: 'Flutter Demo',
-      home: Welcome(),
-      // theme: ThemeData(
-      //   inputDecorationTheme: const InputDecorationTheme(
-      //     focusedBorder: UnderlineInputBorder(
-      //         borderSide: BorderSide(color: Color(0xff72AC45))),
-      //     enabledBorder: UnderlineInputBorder(
-      //       borderSide: BorderSide(color: Colors.grey),
-      //     ),
-      //     border: UnderlineInputBorder(
-      //       borderSide: BorderSide(color: Color(0xff72AC45)),
-      //     ),
-      //   ),
-      // ),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: const WelcomePage(),
       debugShowCheckedModeBanner: false,
     );
   }

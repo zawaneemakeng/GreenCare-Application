@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:greencare/pages/login.dart';
 
-class Register extends StatelessWidget {
-  const Register({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfff5F2EB),
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: ListView(
         children: [
           Padding(
@@ -60,7 +65,7 @@ class Register extends StatelessWidget {
                   Container(
                     height: 480,
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: const Color(0xfff5F2EB),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(20)),
                         boxShadow: [
@@ -242,7 +247,7 @@ class Register extends StatelessWidget {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const Login()),
+                                                    const LoginPage()),
                                           );
                                         }),
                                   ],
@@ -259,7 +264,10 @@ class Register extends StatelessWidget {
                                 fixedSize: const Size(120, 40),
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(50))),
-                            child: const Text('สมัครบัญชี'),
+                            child: const Text(
+                              'สมัครบัญชี',
+                              style: TextStyle(color: Color(0xfff5F2EB)),
+                            ),
                           ),
                         ),
                       ],

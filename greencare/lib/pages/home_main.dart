@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:greencare/controller/global_controller.dart';
-import 'package:greencare/model/weather/hourly.dart';
 import 'package:greencare/widgets/current_weather_widget.dart';
 import 'package:greencare/widgets/header_widgets.dart';
 import 'package:greencare/widgets/hourly_weather_widget.dart';
-import 'package:greencare/widgets/water_level.dart';
 
 class HomeMain extends StatefulWidget {
   const HomeMain({super.key});
