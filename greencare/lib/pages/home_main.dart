@@ -30,7 +30,7 @@ class _HomeMainState extends State<HomeMain> {
                     scrollDirection: Axis.vertical,
                     children: [
                       const SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       const HeaderWidget(),
                       //for our current temp ('current')

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:greencare/pages/onboarding_screen.dart';
 import 'package:greencare/pages/welcome.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        fontFamily: 'PK',
         scaffoldBackgroundColor: const Color(0xFFEFEFEF),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,

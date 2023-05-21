@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:greencare/pages/home_main.dart';
 import 'package:get/get.dart';
 import 'package:greencare/controller/global_controller.dart';
+import 'package:greencare/pages/login.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,7 +23,11 @@ class _HomePageState extends State<HomePage> {
       style: optionStyle,
     ),
     Text(
-      'Index 2: School',
+      'Index 3: School',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 4: School',
       style: optionStyle,
     ),
   ];
@@ -40,22 +45,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.grey[100],
+          backgroundColor: const Color(0xFFEFEFEF),
           toolbarHeight: 40,
           centerTitle: true,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => const AboutPage()));
-                },
-                icon: const Icon(
-                  Icons.chat,
-                  color: Color.fromARGB(255, 12, 12, 12),
-                ))
-          ],
           title: const Text(
             'All todolist',
           )),
@@ -70,25 +62,26 @@ class _HomePageState extends State<HomePage> {
           SalomonBottomBarItem(
             icon: Icon(Icons.home),
             title: Text("Home"),
-            selectedColor: Colors.purple,
           ),
 
           /// Search
           SalomonBottomBarItem(
             icon: Icon(Icons.search),
             title: Text("Search"),
-            selectedColor: Colors.orange,
           ),
 
           /// Profile
           SalomonBottomBarItem(
             icon: Icon(Icons.person),
             title: Text("Profile"),
-            selectedColor: Colors.teal,
+          ),
+          SalomonBottomBarItem(
+            icon: Icon(Icons.chat_bubble),
+            title: Text("Profile"),
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Color(0xff3AAA94),
         onTap: _onItemTapped,
       ),
     );
@@ -117,7 +110,14 @@ class _HomePageState extends State<HomePage> {
           ),
           ListTile(
             leading: const Icon(Icons.logout),
-            title: const Text('logout'),
+            title: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                },
+                child: const Text('logout')),
             onTap: () {
               //logout(context);
             },

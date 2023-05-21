@@ -39,7 +39,7 @@ class _HourlyDataWidgetState extends State<HourlyDataWidget> {
   Widget hourlyList() {
     return Container(
       height: 150,
-      padding: const EdgeInsets.only(bottom: 10, top: 10),
+      padding: const EdgeInsets.only(bottom: 8, top: 8),
       child: ListView.builder(
         scrollDirection: Axis.horizontal, //เเนวตั้ง
         itemCount: widget.weatherDataHourly.hourly.length + 1 > 12
@@ -61,13 +61,12 @@ class _HourlyDataWidgetState extends State<HourlyDataWidget> {
                             offset: const Offset(0.5, 0),
                             blurRadius: 0,
                             spreadRadius: 0,
-                            color: Color.fromARGB(255, 235, 235, 235)
-                                .withAlpha(150))
+                            color: Color(0xff3AAA94).withAlpha(30))
                       ],
                       gradient: cardIndex.value == index
                           ? const LinearGradient(colors: [
-                              CustomColors.firstGradientColor,
-                              CustomColors.secondGradientColor
+                              Color.fromARGB(255, 77, 184, 162),
+                              Color.fromARGB(255, 72, 190, 166),
                             ])
                           : null),
                   child: HourlyDetails(
@@ -111,7 +110,6 @@ class HourlyDetails extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Container(
-          margin: const EdgeInsets.only(top: 10),
           child: Text(getTime(time) + ' น.',
               style: TextStyle(
                 color: cardIndex == index
@@ -120,7 +118,6 @@ class HourlyDetails extends StatelessWidget {
               )),
         ),
         Container(
-          margin: const EdgeInsets.all(10),
           child: Image.asset(
             "assets/weather/$weatherIcon.png",
             height: 40,
@@ -128,7 +125,6 @@ class HourlyDetails extends StatelessWidget {
           ),
         ),
         Container(
-            margin: const EdgeInsets.only(bottom: 10),
             child: Text("$temp °",
                 style: TextStyle(
                   color: cardIndex == index

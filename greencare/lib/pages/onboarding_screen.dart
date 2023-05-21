@@ -53,7 +53,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                   count: 3,
                   effect: ExpandingDotsEffect(
                     dotColor: const Color.fromARGB(255, 207, 206, 206),
-                    activeDotColor: Colors.green,
+                    activeDotColor: Color(0xff3AAA94),
                   ),
                 ),
                 // next or done

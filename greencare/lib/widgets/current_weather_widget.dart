@@ -29,7 +29,8 @@ class CurrentWeatherWidget extends StatelessWidget {
           height: 80,
           width: 80,
         ),
-        Container(height: 50, width: 1, color: CustomColors.dividerline),
+        Container(
+            height: 50, width: 1, color: Color.fromARGB(255, 130, 130, 130)),
         RichText(
             text: TextSpan(children: [
           TextSpan(
@@ -50,7 +51,7 @@ class CurrentWeatherWidget extends StatelessWidget {
           Container(
             height: 60,
             width: 60,
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(15),
             decoration: BoxDecoration(
                 color: CustomColors.cardColor,
                 borderRadius: BorderRadius.circular(15)),
