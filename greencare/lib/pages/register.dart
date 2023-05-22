@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:greencare/pages/home..dart';
 import 'package:greencare/pages/login.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -12,272 +13,219 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Stack(
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.center,
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: Image.asset(
-                            'assets/smartfarm2.png',
-                            width: 220,
-                            height: 150,
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFEFEFEF),
+      ),
+      body: Center(
+        child: ListView(
+          children: [
+            Image.asset('assets/smartfarm2.png', width: 200, height: 200),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Container(
+                height: 430,
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromARGB(255, 255, 255, 255).withAlpha(0),
+                      spreadRadius: 0,
+                      blurRadius: 5,
+                      offset: const Offset(0.5, 0),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: Text(
+                          'Register Here ',
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            width: 285,
+                            child: const TextField(
+                              cursorColor: Colors.grey,
+                              style: TextStyle(
+                                color: Colors.black54,
+                              ),
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.email,
+                                  color: Color.fromARGB(255, 133, 133, 133),
+                                ),
+                                hintText: 'example@gmail.com',
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Divider(
+                          height: 1,
+                          color: Colors.grey,
+                          thickness: 1,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            width: 285,
+                            child: const TextField(
+                              obscureText: true,
+                              cursorColor: Colors.grey,
+                              style: TextStyle(
+                                color: Colors.black54,
+                              ),
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.password,
+                                  color: Color.fromARGB(255, 93, 93, 93),
+                                ),
+                                hintText: 'password',
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10),
+                        child: Divider(
+                          height: 1,
+                          color: Colors.grey,
+                          thickness: 1,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            width: 285,
+                            child: const TextField(
+                              obscureText: true,
+                              cursorColor: Colors.grey,
+                              style: TextStyle(
+                                color: Colors.black54,
+                              ),
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.person,
+                                  color: Color.fromARGB(255, 93, 93, 93),
+                                ),
+                                hintText: 'Name',
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10),
+                        child: Divider(
+                          height: 1,
+                          color: Colors.grey,
+                          thickness: 1,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            width: 285,
+                            child: const TextField(
+                              obscureText: true,
+                              cursorColor: Colors.grey,
+                              style: TextStyle(
+                                color: Colors.black54,
+                              ),
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.phone,
+                                  color: Color.fromARGB(255, 93, 93, 93),
+                                ),
+                                hintText: 'Phone Number',
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10),
+                        child: Divider(
+                          height: 1,
+                          color: Colors.grey,
+                          thickness: 1,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const LoginPage()),
+                                );
+                              },
+                              child: Text(
+                                'มีบัญชีเเล้ว',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomePage()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xff3AAA94),
+                              fixedSize: const Size(130, 20),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50))),
+                          child: const Text(
+                            'Register',
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ),
-                      Container(
-                          alignment: Alignment.topLeft,
-                          child: Column(
-                            children: [
-                              Text(
-                                'Your',
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  color: Color(0xff1C6946),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                'Your',
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  color: Color(0xff1C6946),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          )),
                     ],
                   ),
-                  Container(
-                    height: 480,
-                    decoration: BoxDecoration(
-                        color: const Color(0xfff5F2EB),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(20)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(.2),
-                            spreadRadius: 2,
-                            blurRadius: 20,
-                            offset: const Offset(0, 0),
-                          )
-                        ]),
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        const Positioned(
-                          top: 10,
-                          left: 20,
-                          child: Text(
-                            'Login Here',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                            top: 50,
-                            left: 15,
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 285,
-                                      child: const TextField(
-                                        cursorColor: Colors.grey,
-                                        style: TextStyle(
-                                          color: Colors.black54,
-                                        ),
-                                        decoration: InputDecoration(
-                                          prefixIcon: Icon(
-                                            Icons.email,
-                                            color: Color(0xff72AC45),
-                                          ),
-                                          hintText: 'example@gmail.com',
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )),
-                        Positioned(
-                            top: 115,
-                            left: 15,
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 285,
-                                      child: const TextField(
-                                        obscureText: true,
-                                        cursorColor: Colors.grey,
-                                        style: TextStyle(
-                                          color: Colors.black54,
-                                        ),
-                                        decoration: InputDecoration(
-                                          prefixIcon: Icon(Icons.password,
-                                              color: Color(0xff72AC45)),
-                                          hintText: 'your password',
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            )),
-                        Positioned(
-                            top: 180,
-                            left: 15,
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 285,
-                                      child: const TextField(
-                                        obscureText: true,
-                                        cursorColor: Colors.grey,
-                                        style: TextStyle(
-                                          color: Colors.black54,
-                                        ),
-                                        decoration: InputDecoration(
-                                          prefixIcon: Icon(Icons.password,
-                                              color: Color(0xff72AC45)),
-                                          hintText: 'your password',
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            )),
-                        Positioned(
-                            top: 245,
-                            left: 15,
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 285,
-                                      child: const TextField(
-                                        obscureText: true,
-                                        cursorColor: Colors.grey,
-                                        style: TextStyle(
-                                          color: Colors.black54,
-                                        ),
-                                        decoration: InputDecoration(
-                                          prefixIcon: Icon(Icons.password,
-                                              color: Color(0xff72AC45)),
-                                          hintText: 'your password',
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            )),
-                        Positioned(
-                            top: 310,
-                            left: 15,
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 285,
-                                      child: const TextField(
-                                        obscureText: true,
-                                        cursorColor: Colors.grey,
-                                        style: TextStyle(
-                                          color: Colors.black54,
-                                        ),
-                                        decoration: InputDecoration(
-                                          prefixIcon: Icon(Icons.password,
-                                              color: Color(0xff72AC45)),
-                                          hintText: 'your password',
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            )),
-                        Positioned(
-                            top: 360,
-                            left: 15,
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    GestureDetector(
-                                        child: const Align(
-                                          alignment: Alignment.bottomCenter,
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 20.0),
-                                            child: Text(
-                                              "เข้าสู่ระบบ ",
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 13),
-                                            ),
-                                          ),
-                                        ),
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const LoginPage()),
-                                          );
-                                        }),
-                                  ],
-                                )
-                              ],
-                            )),
-                        Positioned(
-                          bottom: 20,
-                          right: 100,
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xff72AC45),
-                                fixedSize: const Size(120, 40),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50))),
-                            child: const Text(
-                              'สมัครบัญชี',
-                              style: TextStyle(color: Color(0xfff5F2EB)),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

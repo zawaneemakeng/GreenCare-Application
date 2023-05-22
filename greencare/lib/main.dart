@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:greencare/pages/onboarding_screen.dart';
-import 'package:greencare/pages/welcome.dart';
-import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MyApp());

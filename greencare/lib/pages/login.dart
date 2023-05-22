@@ -20,7 +20,34 @@ class _LoginPageState extends State<LoginPage> {
       body: Center(
         child: ListView(
           children: [
-            Image.asset('assets/smartfarm2.png', width: 230, height: 230),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30),
+                    child: Text.rich(
+                      TextSpan(
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.bold),
+                          text: "ยินดีต้อนรับ",
+                          children: [
+                            TextSpan(text: '''
+                  
+ การกลับมา''', style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic))
+                          ]),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Image.asset('assets/plant.png', width: 80, height: 80),
+                    ],
+                  ),
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Container(
@@ -42,7 +69,14 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text('Login here '),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: Text(
+                          'Login here ',
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                      ),
                       Row(
                         children: [
                           Container(
@@ -73,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       Row(
                         children: [

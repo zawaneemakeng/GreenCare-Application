@@ -89,10 +89,23 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildDrawer() {
     return Drawer(
+      backgroundColor: const Color(0xFFEFEFEF),
       child: Column(
         children: [
           UserAccountsDrawerHeader(
-              accountName: Text("fullname"), accountEmail: null),
+            accountEmail: Text('jane.doe@example.com'),
+            accountName: Text(
+              'Jane Doe',
+              style: TextStyle(fontSize: 24.0),
+            ),
+            decoration: BoxDecoration(
+              color: Color(0xff3AAA94),
+            ),
+          ),
+          Container(
+            color: Colors.blueAccent,
+            child: Column(children: []),
+          ),
           ListTile(
             leading: const Icon(Icons.home),
             title: const Text('home'),
