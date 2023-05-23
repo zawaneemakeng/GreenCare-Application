@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Container(
-                height: 300,
+                height: 320,
                 decoration: BoxDecoration(
                   color: Color.fromARGB(255, 255, 255, 255),
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -149,8 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RegisterPage()),
+                                      builder: (context) => RegisterPage()),
                                 );
                               },
                               child: Text(
