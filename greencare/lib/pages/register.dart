@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:greencare/pages/home..dart';
 import 'package:greencare/pages/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -16,9 +15,8 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   var email = TextEditingController();
   var password = TextEditingController();
-  var first_name = TextEditingController();
-  var last_name = TextEditingController();
-  var phone_number = TextEditingController();
+  var username = TextEditingController();
+  var phonenumber = TextEditingController();
 
   String result = "------Result------";
 
@@ -60,6 +58,39 @@ class _RegisterPageState extends State<RegisterPage> {
                           style: TextStyle(
                               fontSize: 22, fontWeight: FontWeight.bold),
                         ),
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            width: 285,
+                            child: TextField(
+                              controller: username,
+                              cursorColor: Colors.grey,
+                              style: TextStyle(
+                                color: Colors.black54,
+                              ),
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.person,
+                                  color: Color.fromARGB(255, 93, 93, 93),
+                                ),
+                                hintText: 'Last Name',
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10),
+                        child: Divider(
+                          height: 1,
+                          color: Colors.grey,
+                          thickness: 1,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
                       ),
                       Row(
                         children: [
@@ -133,76 +164,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           Container(
                             width: 285,
                             child: TextField(
-                              controller: first_name,
-                              obscureText: true,
-                              cursorColor: Colors.grey,
-                              style: TextStyle(
-                                color: Colors.black54,
-                              ),
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.person,
-                                  color: Color.fromARGB(255, 93, 93, 93),
-                                ),
-                                hintText: 'Name',
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 10, right: 10),
-                        child: Divider(
-                          height: 1,
-                          color: Colors.grey,
-                          thickness: 1,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            width: 285,
-                            child: TextField(
-                              controller: last_name,
-                              obscureText: true,
-                              cursorColor: Colors.grey,
-                              style: TextStyle(
-                                color: Colors.black54,
-                              ),
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(
-                                  Icons.person,
-                                  color: Color.fromARGB(255, 93, 93, 93),
-                                ),
-                                hintText: 'Last Name',
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 10, right: 10),
-                        child: Divider(
-                          height: 1,
-                          color: Colors.grey,
-                          thickness: 1,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            width: 285,
-                            child: TextField(
-                              controller: phone_number,
-                              obscureText: true,
+                              controller: phonenumber,
                               cursorColor: Colors.grey,
                               style: TextStyle(
                                 color: Colors.black54,
@@ -286,14 +248,13 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future register_newuser() async {
-    var url = Uri.http('000000:8000', 'api/newuser');
+    var url = Uri.http('0000000:8000', 'api/newuser');
     Map<String, String> header = {"Content-type": "application/json"};
-    String v1 = '"username":"${email.text}"';
-    String v2 = '"password":"${password.text}"';
-    String v3 = '"first_name":"${first_name.text}"';
-    String v4 = '"last_name":"${last_name.text}"';
-    String v5 = '"mobile":"${phone_number.text}"';
-    String jsondata = '{$v1,$v2,$v3,$v4,$v5}';
+    String v1 = '"username":"${username.text}"';
+    String v2 = '"email":"${email.text}"';
+    String v3 = '"password":"${password.text}"';
+    String v4 = '"mobile":"${phonenumber.text}"';
+    String jsondata = '{$v1,$v2,$v3,$v4}';
     var response = await http.post(url, headers: header, body: jsondata);
     print('--------result--------');
     print(response.body);
@@ -304,11 +265,10 @@ class _RegisterPageState extends State<RegisterPage> {
     String status = result_json['status'];
 
     if (status == 'user_created') {
-      String t1 = result_json['first_name'];
-      String t2 = result_json['last_name'];
+      String t1 = result_json['username'];
       String token = result_json['token']; //ดึง
       setToken(token); //เมื่อได้รับ tokenเเล้วให้บันทึกในระบบ
-      String setresult = 'ยินดีด้วย คุณ $t1 $t2\n คุณได้สมัคสมาชิกเรียบร้อย';
+      String setresult = 'ยินดีด้วย คุณ $t1 คุณได้สมัคสมาชิกเรียบร้อย';
       setState(() {
         result = setresult;
       });

@@ -1,29 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:greencare/main.dart';
+import 'package:greencare/pages/home_main.dart';
 import 'package:get/get.dart';
 import 'package:greencare/controller/global_controller.dart';
-import 'package:greencare/model/weather/hourly.dart';
-import 'package:greencare/pages/home_main.dart';
-import 'package:greencare/pages/money_manager.dart';
-import 'package:greencare/widgets/current_weather_widget.dart';
-import 'package:greencare/widgets/header_widgets.dart';
-import 'package:greencare/widgets/hourly_weather_widget.dart';
+import 'package:greencare/pages/login.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomeState extends State<Home> {
+class _HomePageState extends State<HomePage> {
+  String username1 = '';
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     HomeMain(),
-    MoneyManager(),
     Text(
       'Index 2: School',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 3: School',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 4: School',
       style: optionStyle,
     ),
   ];
@@ -36,50 +43,56 @@ class _HomeState extends State<Home> {
 
   final GlobalController globalController =
       Get.put(GlobalController(), permanent: true);
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //getTodolist();
+
+    check(); //ตรวจสอบว่ามีชื่อหรือไป ถ้ามีสวัสดี
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: buildDrawer(),
       appBar: AppBar(
-          toolbarHeight: 0.0,
+          backgroundColor: const Color(0xFFEFEFEF),
+          toolbarHeight: 40,
           centerTitle: true,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => const AboutPage()));
-                },
-                icon: const Icon(
-                  Icons.chat,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                ))
-          ],
           title: const Text(
             'All todolist',
           )),
+      drawer: buildDrawer(),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+      bottomNavigationBar: SalomonBottomBar(
+        backgroundColor: Colors.grey[100],
+        items: [
+          /// Home
+          SalomonBottomBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            title: Text("Home"),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Business',
+
+          /// Search
+          SalomonBottomBarItem(
+            icon: Icon(Icons.search),
+            title: Text("Search"),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'School',
+
+          /// Profile
+          SalomonBottomBarItem(
+            icon: Icon(Icons.person),
+            title: Text("Profile"),
+          ),
+          SalomonBottomBarItem(
+            icon: Icon(Icons.chat_bubble),
+            title: Text("Profile"),
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Color(0xff3AAA94),
         onTap: _onItemTapped,
       ),
     );
@@ -87,10 +100,23 @@ class _HomeState extends State<Home> {
 
   Widget buildDrawer() {
     return Drawer(
+      backgroundColor: const Color(0xFFEFEFEF),
       child: Column(
         children: [
           UserAccountsDrawerHeader(
-              accountName: Text("fullname"), accountEmail: null),
+            accountName: Text(
+              username1,
+              style: TextStyle(fontSize: 24.0),
+            ),
+            accountEmail: null,
+            decoration: BoxDecoration(
+              color: Color(0xff3AAA94),
+            ),
+          ),
+          Container(
+            color: Colors.blueAccent,
+            child: Column(children: []),
+          ),
           ListTile(
             leading: const Icon(Icons.home),
             title: const Text('home'),
@@ -108,7 +134,11 @@ class _HomeState extends State<Home> {
           ),
           ListTile(
             leading: const Icon(Icons.logout),
-            title: const Text('logout'),
+            title: GestureDetector(
+                onTap: () {
+                  logout(context);
+                },
+                child: const Text('logout')),
             onTap: () {
               //logout(context);
             },
@@ -116,5 +146,30 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
+  }
+
+  void getUsername() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      var username = pref.getString('username');
+      username1 = 'สวัสดีคุณ $username';
+    });
+  }
+
+  void check() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    final checkvalue = pref.get('username') ?? 0;
+    if (checkvalue != 0) {
+      getUsername();
+    }
+  }
+
+  void logout(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => LoginPage())); //ออกไปโดยไม่ลูกศรย้อนกลับ
   }
 }

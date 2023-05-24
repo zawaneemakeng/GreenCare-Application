@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:greencare/pages/home..dart';
+import 'package:greencare/pages/home.dart';
 import 'package:greencare/pages/register.dart';
 import 'package:greencare/pages/reset_password.dart';
+
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,6 +16,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  var email = TextEditingController();
+  var password = TextEditingController();
+  String result = "----------";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +89,8 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           Container(
                             width: 285,
-                            child: const TextField(
+                            child: TextField(
+                              controller: email,
                               cursorColor: Colors.grey,
                               style: TextStyle(
                                 color: Colors.black54,
@@ -113,7 +122,8 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           Container(
                             width: 285,
-                            child: const TextField(
+                            child: TextField(
+                              controller: password,
                               obscureText: true,
                               cursorColor: Colors.grey,
                               style: TextStyle(
@@ -175,11 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.only(top: 20),
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomePage()),
-                            );
+                            login();
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xff3AAA94),
@@ -192,6 +198,10 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
+                      Text(
+                        result,
+                        style: TextStyle(fontSize: 20, color: Colors.pink),
+                      )
                     ],
                   ),
                 ),
@@ -201,5 +211,57 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future login() async {
+    // var url = Uri.https('abcd.ngrok.io', '/api/post-todolist');
+    var url = Uri.http('0000000:8000:8000', '/api/authenticate');
+    Map<String, String> header = {"Content-type": "application/json"};
+
+    String v1 = '"username":"${email.text}"';
+    String v2 = '"password":"${password.text}"';
+
+    String jsondata = '{$v1,$v2}';
+    var response = await http.post(url, headers: header, body: jsondata);
+    print('--------result--------');
+    print(response.body);
+
+    var resulttext = utf8.decode(response.bodyBytes);
+    var result_json = json.decode(resulttext);
+
+    String status = result_json['status'];
+
+    if (status == 'login-success') {
+      // String user = result_json['username'];
+      String email_auth = result_json['username'];
+      String token = result_json['token']; //ดึง
+      setToken(token); //เมื่อได้รับ tokenเเล้วให้บันทึกในระบบ
+      setUserInfo(email_auth);
+      //ไปยังหน้าใหม่เเเบบไม่ย้อน ไม่มีลูกศร
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (BuildContext context) => HomePage()));
+    } else if (status == 'login-failed') {
+      String setresult = 'เข้าสุ่ระบบไม่สำเร็จ';
+      setState(() {
+        result = setresult;
+      });
+    } else {
+      String setresult = 'กรุณาลองอีกครั้ง';
+      setState(() {
+        result = setresult;
+      });
+    }
+  }
+
+  //auth
+  void setToken(token) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString('token', token);
+  }
+
+  void setUserInfo(usr) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+
+    pref.setString('username', usr);
   }
 }
