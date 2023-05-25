@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:greencare/pages/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -248,7 +249,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future register_newuser() async {
-    var url = Uri.http('0000000:8000', 'api/newuser');
+    var url = Uri.http('8000:8000', 'api/newuser');
     Map<String, String> header = {"Content-type": "application/json"};
     String v1 = '"username":"${username.text}"';
     String v2 = '"email":"${email.text}"';
