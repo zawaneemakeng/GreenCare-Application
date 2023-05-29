@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:greencare/pages/home.dart';
+import 'package:greencare/pages/onboarding_screen.dart';
 import 'package:greencare/pages/register.dart';
 import 'package:greencare/pages/reset_password.dart';
+import 'package:greencare/utils/api_url.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -22,12 +24,27 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFEFEFEF),
-      ),
       body: Center(
         child: ListView(
           children: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: IconButton(
+                    icon: Image.asset('assets/back.png', height: 35, width: 35),
+                    iconSize: 50,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => OnBoardScreen()),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
               child: Row(
@@ -215,7 +232,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future login() async {
     // var url = Uri.https('abcd.ngrok.io', '/api/post-todolist');
-    var url = Uri.http('0000000:8000:8000', '/api/authenticate');
+    var url = Uri.http(urlH(), apiAuth());
     Map<String, String> header = {"Content-type": "application/json"};
 
     String v1 = '"username":"${email.text}"';
