@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:greencare/model/weather_data_current.dart';
-import 'package:greencare/utils/custom_color.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class CurrentWeatherWidget extends StatelessWidget {
+  double water_level = 70.7;
   final WeatherDataCurrent weatherDataCurrent;
-  const CurrentWeatherWidget({Key? key, required this.weatherDataCurrent})
+  CurrentWeatherWidget({Key? key, required this.weatherDataCurrent})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TemperatureWidget(),
+        SoilTempWidget(),
         const SizedBox(
           height: 20,
         ),
@@ -20,7 +21,7 @@ class CurrentWeatherWidget extends StatelessWidget {
     );
   }
 
-  Widget TemperatureWidget() {
+  Widget SoilTempWidget() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -49,35 +50,74 @@ class CurrentWeatherWidget extends StatelessWidget {
       children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           Container(
-            height: 60,
-            width: 60,
-            padding: const EdgeInsets.all(15),
+            height: 65,
+            width: 65,
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-                color: CustomColors.cardColor,
+                color: Color(0xffE6E6E6),
                 borderRadius: BorderRadius.circular(15)),
-            child: Image.asset('assets/icons/humidity.png'),
+            child: Image.asset('assets/icons/humid.png'),
           ),
           Container(
-            height: 60,
-            width: 60,
-            padding: const EdgeInsets.all(16),
+            height: 65,
+            width: 65,
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-                color: CustomColors.cardColor,
+                color: Color(0xffE6E6E6),
                 borderRadius: BorderRadius.circular(15)),
             child: Image.asset('assets/icons/windspeed.png'),
           ),
           Container(
-            height: 60,
-            width: 60,
-            padding: const EdgeInsets.all(16),
+            height: 65,
+            width: 65,
+            padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-                color: CustomColors.cardColor,
+                color: Color(0xffE6E6E6),
                 borderRadius: BorderRadius.circular(15)),
-            child: Image.asset('assets/icons/clouds.png'),
+            child: CircularPercentIndicator(
+              percent: water_level / 100,
+              radius: 20,
+              lineWidth: 7,
+              animation: true,
+              progressColor: Colors.blueAccent,
+              backgroundColor: Colors.white,
+            ),
           ),
         ]),
         SizedBox(
           height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            SizedBox(
+              height: 20,
+              width: 60,
+              child: Text(
+                'ความชื้นในดิน',
+                style: TextStyle(fontSize: 12),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+              width: 60,
+              child: Text(
+                'ความชื้นในดิน',
+                style: TextStyle(fontSize: 12),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+              width: 60,
+              child: Text(
+                'น้ำคงเหลือ',
+                style: TextStyle(fontSize: 12),
+                textAlign: TextAlign.center,
+              ),
+            )
+          ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -104,7 +144,7 @@ class CurrentWeatherWidget extends StatelessWidget {
               height: 20,
               width: 60,
               child: Text(
-                "${weatherDataCurrent.current.clouds}%",
+                "${water_level}%",
                 style: TextStyle(fontSize: 12),
                 textAlign: TextAlign.center,
               ),
