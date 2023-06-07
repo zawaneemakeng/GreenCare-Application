@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/foundation.dart';
-
-import 'package:flutter/services.dart';
-
 class AddTransection extends StatefulWidget {
   const AddTransection({super.key});
 
@@ -16,26 +12,27 @@ class _AddTransectionState extends State<AddTransection> {
   int? amount;
   String note = "Expence";
   String type = "Income";
+  int? buddhistYear;
 
   List<String> months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec"
+    "มกราคม",
+    "กุมภาพันธ์",
+    "มีนาคม",
+    "เมษายน",
+    "พฤษภาคม",
+    "มิถุนายน",
+    "กรกฎาคม",
+    "สิงหาคม",
+    "กันยายน",
+    "ตุลาคม",
+    "พฤศจิกายน",
+    "ธันวาคม"
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+        padding: const EdgeInsets.all(10),
         child: ListView(
           children: [
             Row(
@@ -66,74 +63,17 @@ class _AddTransectionState extends State<AddTransection> {
                 Container(
                   width: 285,
                   child: TextField(
+                    keyboardType: TextInputType.number,
                     cursorColor: Colors.grey,
                     style: TextStyle(
                       color: Colors.black54,
                     ),
                     decoration: InputDecoration(
                       prefixIcon: Icon(
-                        Icons.email,
+                        Icons.money,
                         color: Color.fromARGB(255, 133, 133, 133),
                       ),
-                      hintText: 'example@gmail.com',
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 10, right: 10),
-              child: Divider(
-                height: 1,
-                color: Colors.grey,
-                thickness: 1,
-              ),
-            ),
-            Row(
-              children: [
-                Container(
-                  width: 285,
-                  child: TextField(
-                    cursorColor: Colors.grey,
-                    style: TextStyle(
-                      color: Colors.black54,
-                    ),
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.email,
-                        color: Color.fromARGB(255, 133, 133, 133),
-                      ),
-                      hintText: 'example@gmail.com',
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 10, right: 10),
-              child: Divider(
-                height: 1,
-                color: Colors.grey,
-                thickness: 1,
-              ),
-            ),
-            Row(
-              children: [
-                Container(
-                  width: 285,
-                  child: TextField(
-                    cursorColor: Colors.grey,
-                    style: TextStyle(
-                      color: Colors.black54,
-                    ),
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.email,
-                        color: Color.fromARGB(255, 133, 133, 133),
-                      ),
-                      hintText: 'Note on Transaction',
+                      hintText: 'จำนวนเงิน',
                       border: InputBorder.none,
                     ),
                   ),
@@ -152,20 +92,14 @@ class _AddTransectionState extends State<AddTransection> {
             Row(
               children: [
                 Container(
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 69, 119, 199),
-                    borderRadius: BorderRadius.circular(
-                      16.0,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: Icon(
+                      Icons.date_range,
+                      size: 24.0,
+                      // color: Colors.grey[700],
+                      color: Colors.grey,
                     ),
-                  ),
-                  padding: EdgeInsets.all(
-                    12.0,
-                  ),
-                  child: Icon(
-                    Icons.attach_money,
-                    size: 24.0,
-                    // color: Colors.grey[700],
-                    color: Colors.white,
                   ),
                 ),
                 SizedBox(
@@ -175,11 +109,14 @@ class _AddTransectionState extends State<AddTransection> {
                   label: Text(
                     "รายรับ",
                     style: TextStyle(
-                      fontSize: 18.0,
+                      fontSize: 14.0,
                       color: type == "Income" ? Colors.white : Colors.black,
                     ),
                   ),
-                  selectedColor: Color.fromARGB(255, 69, 119, 199),
+                  selectedColor: Color(0xff3AAA94),
+                  backgroundColor: Color.fromARGB(255, 147, 206, 190),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)),
                   onSelected: (val) {
                     if (val) {
                       setState(() {
@@ -193,17 +130,20 @@ class _AddTransectionState extends State<AddTransection> {
                   selected: type == "Income" ? true : false,
                 ),
                 SizedBox(
-                  width: 8.0,
+                  width: 10.0,
                 ),
                 ChoiceChip(
                   label: Text(
                     "รายจ่าย",
                     style: TextStyle(
-                      fontSize: 18.0,
-                      color: type == "Expense" ? Colors.white : Colors.black,
+                      fontSize: 14.0,
+                      color: type == "Income" ? Colors.black : Colors.white,
                     ),
                   ),
-                  selectedColor: Color.fromARGB(255, 69, 119, 199),
+                  selectedColor: Color(0xff3AAA94),
+                  backgroundColor: Color.fromARGB(255, 147, 206, 190),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)),
                   onSelected: (val) {
                     if (val) {
                       setState(() {
@@ -217,21 +157,47 @@ class _AddTransectionState extends State<AddTransection> {
                   },
                   selected: type == "Expense" ? true : false,
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  child: Divider(
-                    height: 1,
-                    color: Colors.grey,
-                    thickness: 1,
+              ],
+            ),
+            //
+            const Padding(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: Divider(
+                height: 1,
+                color: Colors.grey,
+                thickness: 1,
+              ),
+            ),
+            //
+            Row(
+              children: [
+                Container(
+                  width: 285,
+                  child: TextField(
+                    cursorColor: Colors.grey,
+                    style: TextStyle(
+                      color: Colors.black54,
+                    ),
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.note,
+                        color: Color.fromARGB(255, 133, 133, 133),
+                      ),
+                      hintText: 'โน้ตค่าใช้จ่าย',
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
               ],
             ),
-            //
-            SizedBox(
-              height: 20.0,
+            const Padding(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: Divider(
+                height: 1,
+                color: Colors.grey,
+                thickness: 1,
+              ),
             ),
-            //
             SizedBox(
               height: 50.0,
               child: TextButton(
@@ -249,20 +215,14 @@ class _AddTransectionState extends State<AddTransection> {
                 child: Row(
                   children: [
                     Container(
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 69, 119, 199),
-                        borderRadius: BorderRadius.circular(
-                          16.0,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 12),
+                        child: Icon(
+                          Icons.date_range,
+                          size: 24.0,
+                          // color: Colors.grey[700],
+                          color: Colors.grey,
                         ),
-                      ),
-                      padding: EdgeInsets.all(
-                        12.0,
-                      ),
-                      child: Icon(
-                        Icons.date_range,
-                        size: 24.0,
-                        // color: Colors.grey[700],
-                        color: Colors.white,
                       ),
                     ),
                     SizedBox(
@@ -271,7 +231,7 @@ class _AddTransectionState extends State<AddTransection> {
                     Text(
                       "${selectedDate.day} ${months[selectedDate.month - 1]}",
                       style: TextStyle(
-                        fontSize: 20.0,
+                        fontSize: 16.0,
                         color: Colors.grey[700],
                       ),
                     ),
@@ -287,11 +247,6 @@ class _AddTransectionState extends State<AddTransection> {
                 thickness: 1,
               ),
             ),
-            //
-            SizedBox(
-              height: 20.0,
-            ),
-            //
             Padding(
               padding: const EdgeInsets.only(left: 70.0, right: 70.0),
               child: ElevatedButton(
@@ -315,10 +270,12 @@ class _AddTransectionState extends State<AddTransection> {
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
+      context: context,
+      locale: const Locale("th", "TH"),
+      initialDate: selectedDate,
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime(2101),
+    );
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
