@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 
 class AddTransection extends StatefulWidget {
@@ -12,7 +11,7 @@ class AddTransection extends StatefulWidget {
 class _AddTransectionState extends State<AddTransection> {
   DateTime selectedDate = DateTime.now();
   var amount = TextEditingController();
-  var note = TextEditingController();
+  String note = "Expense";
   String type = "Income";
 
   List<String> months = [
@@ -197,7 +196,7 @@ class _AddTransectionState extends State<AddTransection> {
                 Container(
                   width: 285,
                   child: TextField(
-                    controller: note,
+                    // controller: note,
                     cursorColor: Colors.grey,
                     style: TextStyle(
                       color: Colors.black54,
