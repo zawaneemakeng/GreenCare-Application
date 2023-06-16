@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:greencare/main.dart';
 import 'package:greencare/pages/home_main.dart';
 import 'package:get/get.dart';
 import 'package:greencare/controller/global_controller.dart';
 import 'package:greencare/pages/login.dart';
+import 'package:greencare/pages/money_manager/transection.dart';
+import 'package:greencare/pages/shop/shop.dart';
+import 'package:greencare/widgets/water_level.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,23 +18,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String username1 = '';
+  int? userId;
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     HomeMain(),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 3: School',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 4: School',
-      style: optionStyle,
-    ),
+    Text('data'),
+    AllTransection(),
+    ShopPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -56,11 +50,17 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: const Color(0xFFEFEFEF),
+          backgroundColor: const Color(0xFFefefef),
+          scrolledUnderElevation: 0,
           toolbarHeight: 40,
           centerTitle: true,
+          elevation: 0,
           title: const Text(
-            'All todolist',
+            'GREENCARE',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           )),
       drawer: buildDrawer(),
       body: Center(
@@ -77,17 +77,17 @@ class _HomePageState extends State<HomePage> {
 
           /// Search
           SalomonBottomBarItem(
-            icon: Icon(Icons.search),
+            icon: Icon(Icons.school),
             title: Text("Search"),
           ),
 
           /// Profile
           SalomonBottomBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.money),
             title: Text("Profile"),
           ),
           SalomonBottomBarItem(
-            icon: Icon(Icons.chat_bubble),
+            icon: Icon(Icons.person),
             title: Text("Profile"),
           ),
         ],
@@ -110,7 +110,12 @@ class _HomePageState extends State<HomePage> {
             ),
             accountEmail: null,
             decoration: BoxDecoration(
-              color: Color(0xff3AAA94),
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xff3AAA94),
+                  Color.fromARGB(255, 147, 206, 190),
+                ],
+              ),
             ),
           ),
           Container(
@@ -153,6 +158,8 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       var username = pref.getString('username');
       username1 = 'สวัสดีคุณ $username';
+      var user_id = pref.getInt('user');
+      userId = user_id;
     });
   }
 
@@ -167,6 +174,8 @@ class _HomePageState extends State<HomePage> {
   void logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('token');
+    prefs.remove('username');
+    prefs.remove('user');
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
