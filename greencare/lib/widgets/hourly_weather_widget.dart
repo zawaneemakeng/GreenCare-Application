@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:greencare/controller/global_controller.dart';
 import 'package:greencare/model/weather_data_hourly.dart';
@@ -25,10 +23,11 @@ class _HourlyDataWidgetState extends State<HourlyDataWidget> {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
           alignment: Alignment.topCenter,
           child: Text(
             "วันนี้",
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
         ),
         hourlyList(),
@@ -39,7 +38,7 @@ class _HourlyDataWidgetState extends State<HourlyDataWidget> {
   Widget hourlyList() {
     return Container(
       height: 150,
-      padding: const EdgeInsets.only(bottom: 8, top: 8),
+      padding: const EdgeInsets.only(bottom: 8, top: 10),
       child: ListView.builder(
         scrollDirection: Axis.horizontal, //เเนวตั้ง
         itemCount: widget.weatherDataHourly.hourly.length + 1 > 12
@@ -53,21 +52,25 @@ class _HourlyDataWidgetState extends State<HourlyDataWidget> {
                 },
                 child: Container(
                   width: 80,
-                  margin: const EdgeInsets.only(left: 20),
+                  margin: const EdgeInsets.only(left: 20, right: 20),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                            offset: const Offset(0.5, 0),
-                            blurRadius: 0,
-                            spreadRadius: 0,
-                            color: Color(0xff3AAA94).withAlpha(30))
+                          offset: const Offset(0.5, 0),
+                          blurRadius: 0,
+                          spreadRadius: 0,
+                          // EDEDED
+                          color: Color(0xffE6E6E6),
+                        )
                       ],
                       gradient: cardIndex.value == index
-                          ? const LinearGradient(colors: [
-                              Color.fromARGB(255, 77, 184, 162),
-                              Color.fromARGB(255, 72, 190, 166),
-                            ])
+                          ? const LinearGradient(
+                              colors: [
+                                Color(0xff3AAA94),
+                                Color.fromARGB(255, 147, 206, 190),
+                              ],
+                            )
                           : null),
                   child: HourlyDetails(
                     index: index,
