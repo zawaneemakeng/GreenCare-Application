@@ -1,10 +1,14 @@
 // import 'package:flutter/material.dart';
-// import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 
-// class WaterLevel extends StatelessWidget {
-//   double water_level = 50.0;
-//   WaterLevel({super.key});
+// class WaterLevel extends StatefulWidget {
+//   const WaterLevel({super.key});
 
+//   @override
+//   State<WaterLevel> createState() => _WaterLevelState();
+// }
+
+// class _WaterLevelState extends State<WaterLevel> {
+//   var water_level = 50.0;
 //   @override
 //   Widget build(BuildContext context) {
 //     return Center(
@@ -31,3 +35,4 @@
 //     );
 //   }
 // }
+// 
