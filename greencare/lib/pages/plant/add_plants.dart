@@ -59,7 +59,7 @@ class _AddPlantsState extends State<AddPlants> {
                   icon: Image.asset('assets/back.png', height: 35, width: 35),
                   iconSize: 50,
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pop(context, 'refresh');
                   },
                 ),
               ],
@@ -250,7 +250,7 @@ class _AddPlantsState extends State<AddPlants> {
 
   Future postTodo() async {
     // var url = Uri.https('abcd.ngrok.io', '/api/post-todolist');
-    var url = Uri.http('8000:8000', 'add/newplants');
+    var url = Uri.http('000000:8000', 'add/newplants');
     Map<String, String> header = {"Content-type": "application/json"};
     String t2 = "ผักชี";
     String t3 = "บลาๆ";
