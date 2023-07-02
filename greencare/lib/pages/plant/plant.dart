@@ -160,7 +160,7 @@ class _PlantPageState extends State<PlantPage> {
   }
 
   Future getPlants() async {
-    var url = Uri.http('8000:8000', '/api/plants/$userID');
+    var url = Uri.http('00000:8000', '/api/plants/$userID');
     var response = await http.get(url);
     // var result = json.decode(response.body);
     var result = utf8.decode(response.bodyBytes);
