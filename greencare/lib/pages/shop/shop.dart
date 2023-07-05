@@ -4,6 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:greencare/utils/api_url.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -34,6 +37,7 @@ class _ShopPageState extends State<ShopPage> {
     final name = basename(imagePath);
     final image = File('${directory.path}/$name');
     print(name);
+    setState(() {});
     return File(imagePath).copy(image.path);
   }
 
@@ -86,6 +90,27 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
+  Future uploadImage(String title, File file) async {
+    var request =
+        http.MultipartRequest("POST", Uri.parse('${urlH()}/api/image'));
+
+    request.fields['title'] = "du";
+  }
+  // Future postTodo(BuildContext context) async {
+  //   // var url = Uri.https('abcd.ngrok.io', '/api/post-todolist');
+  //   var url = Uri.http(urlH(), '/api/transection');
+  //   Map<String, String> header = {"Content-type": "application/json"};
+  //   String v1 = '"user":"${userID}"';
+  //   String v2 = '"amount":"${amount.text}"';
+  //   String v3 = '"detail":"${note.text}"';
+  //   String v4 = '"transtype":"${type}"';
+  //   String v5 = '"date":"${fulldate}"';
+  //   String jsondata = '{$v1,$v2,$v3,$v4,$v5}';
+  //   var response = await http.post(url, headers: header, body: jsondata);
+  //   print('--------result--------');
+  //   print(response.body);
+  //   Navigator.pop(context, 'refresh');
+  // }
   // Widget imageProfile() {
   //   return Center(
   //     child: Stack(children: <Widget>[
