@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -16,30 +18,42 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
+  File? selectedImage;
+  String message = "";
   File? _image;
+  Future uploadImage() async {
+    final request =
+        http.MultipartRequest("POST", Uri.parse("http://${urlH()}/api/image"));
+    final headers = {"Content-type": "multipart/form-data"};
+    request.files.add(http.MultipartFile('cover_img',
+        selectedImage!.readAsBytes().asStream(), selectedImage!.lengthSync(),
+        filename: selectedImage!.path.split("/").last));
+    request.headers.addAll(headers);
+    final response = await request.send();
+    http.Response res = await http.Response.fromStream(response);
+  }
 
   Future _getImage(ImageSource source) async {
-    try {
-      final image = await ImagePicker().pickImage(source: source);
-      if (image == null) return;
-      // final imageTemporary = File(image.path);
-      final imagePermanant = await saveFilePermanently(image.path);
-      setState(() {
-        this._image = imagePermanant;
-      });
-    } on PlatformException catch (e) {
-      print(e);
-    }
+    final image = await ImagePicker().pickImage(source: source);
+    selectedImage = File(image!.path);
+    setState(() {
+      print(selectedImage);
+    });
   }
 
-  Future<File> saveFilePermanently(String imagePath) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final name = basename(imagePath);
-    final image = File('${directory.path}/$name');
-    print(name);
-    setState(() {});
-    return File(imagePath).copy(image.path);
-  }
+  // Future<File> saveFilePermanently(String imagePath) async {
+  //   final directory = await getApplicationDocumentsDirectory();
+  //   final name = basename(imagePath);
+  //   final image = File('${directory.path}/$name');
+  //   print(name);
+
+  //   setState(() {
+  //     _image = image;
+  //     print(_image);
+  //     uploadImage();
+  //   });
+  //   return File(imagePath).copy(image.path);
+  // }
 
   // @override
   // void initState() {
@@ -52,21 +66,21 @@ class _ShopPageState extends State<ShopPage> {
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Center(
-          child: Column(children: [
+          child: Column(children: <Widget>[
             SizedBox(
               height: 40,
             ),
-            _image != null
-                ? Image.file(
-                    _image!,
-                    width: 200,
-                    height: 200,
-                    fit: BoxFit.cover,
-                  )
-                : Image.network(
+            selectedImage == null
+                ? Image.network(
                     "https://cdn-icons-png.flaticon.com/512/3607/3607444.png",
                     width: 200,
                     height: 200,
+                  )
+                : Image.file(
+                    selectedImage!,
+                    width: 200,
+                    height: 200,
+                    fit: BoxFit.cover,
                   ),
             SizedBox(
               height: 40,
@@ -84,33 +98,20 @@ class _ShopPageState extends State<ShopPage> {
                   _getImage(ImageSource.camera);
                 },
                 child: Text('camara')),
+            SizedBox(
+              height: 40,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  uploadImage();
+                },
+                child: Text('Upload')),
           ]),
         ),
       ),
     );
   }
 
-  Future uploadImage(String title, File file) async {
-    var request =
-        http.MultipartRequest("POST", Uri.parse('${urlH()}/api/image'));
-
-    request.fields['title'] = "du";
-  }
-  // Future postTodo(BuildContext context) async {
-  //   // var url = Uri.https('abcd.ngrok.io', '/api/post-todolist');
-  //   var url = Uri.http(urlH(), '/api/transection');
-  //   Map<String, String> header = {"Content-type": "application/json"};
-  //   String v1 = '"user":"${userID}"';
-  //   String v2 = '"amount":"${amount.text}"';
-  //   String v3 = '"detail":"${note.text}"';
-  //   String v4 = '"transtype":"${type}"';
-  //   String v5 = '"date":"${fulldate}"';
-  //   String jsondata = '{$v1,$v2,$v3,$v4,$v5}';
-  //   var response = await http.post(url, headers: header, body: jsondata);
-  //   print('--------result--------');
-  //   print(response.body);
-  //   Navigator.pop(context, 'refresh');
-  // }
   // Widget imageProfile() {
   //   return Center(
   //     child: Stack(children: <Widget>[
