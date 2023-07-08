@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:greencare/sqldb/sqlitedb.dart';
 
-import '../../model/prodect.dart';
+import 'package:greencare/model/prodect.dart';
 
 class UpdatePage extends StatefulWidget {
   final Product editProduct;
