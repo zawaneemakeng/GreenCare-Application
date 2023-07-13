@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:greencare/pages/money_manager/add_transection.dart';
+import 'package:greencare/pages/money_manager/update_transection.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:greencare/utils/api_url.dart';
 
 class AllTransection extends StatefulWidget {
   const AllTransection({super.key});
@@ -9,108 +16,116 @@ class AllTransection extends StatefulWidget {
 }
 
 class _AllTransectionState extends State<AllTransection> {
-  int totalBalance = 0;
-  int totalIncome = 0;
-  int totalExpense = 0;
+  double totalIncome = 0.0;
+  double totalExpense = 0.0;
+  double totalBalance = 0.0;
 
-  getTotalBalance(Map entieData) {
-    entieData.forEach((key, value) {
-      print(key);
-    });
+  List incomeItem = [];
+  List expenseItem = [];
+  int? userID;
+  double? total;
+  int? count;
+
+  @override
+  void initState() {
+    super.initState();
+    check();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: SizedBox(
-              height: 45,
-              width: 45,
-              child: FittedBox(
-                child: FloatingActionButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AddTransection()),
-                    );
-                  },
-                  backgroundColor: Color(0xff3AAA94),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50.0)),
-                  child: Icon(
-                    Icons.add,
-                    size: 30.0,
-                    color: Colors.white,
-                  ),
-                ),
-              )),
-        ),
-        body: ListView(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width * 0.9,
-              margin: EdgeInsets.all(20.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xff3AAA94),
-                      Color.fromARGB(255, 147, 206, 190),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(24),
-                  ),
-                ),
-                padding: EdgeInsets.symmetric(vertical: 18.0, horizontal: 8.0),
-                child: Column(
-                  children: [
-                    Text('ยอดรวมทั้งหมด',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16)),
-                    Text('15,909 บาท',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16)),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          cardIncome("1200"),
-                          cardExpense("700"),
-                        ],
-                      ),
-                    ),
-                  ],
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: SizedBox(
+            height: 45,
+            width: 45,
+            child: FittedBox(
+              child: FloatingActionButton(
+                onPressed: () async {
+                  String refresh = await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AddTransection()),
+                  );
+                  if (refresh == 'refresh') {
+                    check();
+                  }
+                },
+                backgroundColor: Color(0xff3AAA94),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0)),
+                child: Icon(
+                  Icons.add,
+                  size: 30.0,
+                  color: Colors.white,
                 ),
               ),
-            ),
+            )),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            cardtotal(),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
               child: Text('ค่าใช้จ่ายล่าสุด',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
             ),
-            expenseTile(100, "ค่ากินไก่"),
-            incomeTile(200, "ขายผักบุ้ง")
-
-            // ListView.builder(
-            //     shrinkWrap: true,
-            //     physics: NeverScrollableScrollPhysics(),
-            //     itemCount: snapshot.data!.length,
-            //     itemBuilder: (context, index) {
-            //       Map dataIndex - snapshot.data![index];
-            //       return Text('data');
-            //     })
+            transTile(),
+            SizedBox(
+              height: 20,
+            )
           ],
-        ));
+        ),
+      ),
+    );
   }
 
-  Widget cardIncome(String income) {
+  Widget cardtotal() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.9,
+      margin: EdgeInsets.all(20.0),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xff3AAA94),
+              Color.fromARGB(255, 147, 206, 190),
+            ],
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(24),
+          ),
+        ),
+        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+        child: Column(
+          children: [
+            Text('ยอดรวมคงเหลือ',
+                textAlign: TextAlign.center, style: TextStyle(fontSize: 16)),
+            Text("${totalBalance}",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            SizedBox(
+              height: 15,
+            ),
+            Padding(
+              padding: EdgeInsets.all(6),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  cardIncome(),
+                  cardExpense(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget cardIncome() {
     return Row(
       children: [
         Container(
@@ -135,7 +150,7 @@ class _AllTransectionState extends State<AllTransection> {
               style: TextStyle(fontSize: 16),
             ),
             Text(
-              income,
+              "${totalIncome}",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
             ),
@@ -145,7 +160,7 @@ class _AllTransectionState extends State<AllTransection> {
     );
   }
 
-  Widget cardExpense(String expense) {
+  Widget cardExpense() {
     return Row(
       children: [
         Container(
@@ -170,7 +185,7 @@ class _AllTransectionState extends State<AllTransection> {
               style: TextStyle(fontSize: 16),
             ),
             Text(
-              expense,
+              "${totalExpense}",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
             ),
@@ -180,65 +195,249 @@ class _AllTransectionState extends State<AllTransection> {
     );
   }
 
-  Widget expenseTile(int value, String note) {
-    return Container(
-      margin: EdgeInsets.only(
-        left: 20,
-        right: 20,
-        top: 10,
-      ),
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-          color: Colors.grey[300], borderRadius: BorderRadius.circular(8.0)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.arrow_circle_up_outlined,
-                color: Colors.red,
+  Widget transTile() {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: incomeItem.length.clamp(0, 6),
+        shrinkWrap: false,
+        itemBuilder: (context, int index) {
+          final reversedIndex = incomeItem.length - 1 - index;
+          if (incomeItem[reversedIndex]['transtype'] == 'Income') {
+            return GestureDetector(
+              onTap: () {},
+              child: Container(
+                margin: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                  top: 15,
+                ),
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Slidable(
+                  endActionPane: ActionPane(
+                    extentRatio: 0.4,
+                    motion: DrawerMotion(),
+                    children: [
+                      SlidableAction(
+                          autoClose: true,
+                          icon: Icons.delete,
+                          backgroundColor: Color(0xffE0E0E0),
+                          foregroundColor: Colors.red,
+                          onPressed: (context) => {}),
+                      SlidableAction(
+                          icon: Icons.edit,
+                          backgroundColor: Color(0xffE0E0E0),
+                          foregroundColor: Colors.green,
+                          onPressed: (context) => {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => UpdateTransition(
+                                              incomeItem[reversedIndex]['id'],
+                                              incomeItem[reversedIndex]
+                                                  ['amount'],
+                                              incomeItem[reversedIndex]
+                                                  ['detail'],
+                                              incomeItem[reversedIndex]
+                                                  ['transtype'],
+                                              incomeItem[reversedIndex]['date'],
+                                            )))).then(
+                                  (value) {
+                                    //.then ตือให้ทำอะไรถ้ากลับมา
+                                    setState(() {
+                                      totalIncome = 0.0;
+                                      totalExpense = 0.0;
+                                      totalBalance = 0.0;
+                                      getTransection();
+                                      print(value);
+                                      if (value == 'update') {
+                                        final snackBar = SnackBar(
+                                          content:
+                                              const Text('เเก้ไขเรียบร้อย'),
+                                          action: SnackBarAction(
+                                            label: 'Undo',
+                                            onPressed: () {},
+                                          ),
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      }
+                                    });
+                                  },
+                                )
+                              }),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.arrow_circle_down_outlined,
+                            color: Colors.green,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("${incomeItem[reversedIndex]['detail']}"),
+                              Text(
+                                "${incomeItem[reversedIndex]['date']}",
+                                style: TextStyle(
+                                    color: Colors.grey[600], fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Text("+ ${incomeItem[reversedIndex]['amount']}",
+                          style: TextStyle(fontSize: 14)),
+                    ],
+                  ),
+                ),
               ),
-              SizedBox(
-                width: 10,
+            );
+          } else if (incomeItem[reversedIndex]['transtype'] == 'Expense') {
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => UpdateTransition(
+                              incomeItem[reversedIndex]['id'],
+                              incomeItem[reversedIndex]['amount'],
+                              incomeItem[reversedIndex]['detail'],
+                              incomeItem[reversedIndex]['transtype'],
+                              incomeItem[reversedIndex]['date'],
+                            )))).then(
+                  (value) {
+                    //.then ตือให้ทำอะไรถ้ากลับมา
+                    setState(() {
+                      totalIncome = 0.0;
+                      totalExpense = 0.0;
+                      totalBalance = 0.0;
+                      getTransection();
+                      print(value);
+                      if (value == 'update') {
+                        final snackBar = SnackBar(
+                          content: const Text('เเก้ไขเรียบร้อย'),
+                          action: SnackBarAction(
+                            label: 'Undo',
+                            onPressed: () {},
+                          ),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    });
+                  },
+                );
+              },
+              onLongPress: () {
+                Deletetran();
+              },
+              child: Container(
+                margin: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                  top: 15,
+                ),
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(8.0)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.arrow_circle_up_outlined,
+                          color: Colors.red,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("${incomeItem[reversedIndex]['detail']}"),
+                            Text(
+                              "${incomeItem[reversedIndex]['date']}",
+                              style: TextStyle(
+                                  color: Colors.grey[600], fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Text("- ${incomeItem[reversedIndex]['amount']}",
+                        style: TextStyle(fontSize: 14)),
+                  ],
+                ),
               ),
-              Text(note),
-            ],
-          ),
-          Text("-${value} "),
-        ],
+            );
+          }
+        },
       ),
     );
   }
 
-  Widget incomeTile(int value, String note) {
+  Widget Deletetran() {
     return Container(
-      margin: EdgeInsets.only(
-        left: 20,
-        right: 20,
-        top: 15,
-      ),
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-          color: Colors.grey[300], borderRadius: BorderRadius.circular(8.0)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.arrow_circle_down_outlined,
-                color: Colors.green,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(note),
-            ],
-          ),
-          Text("+${value} "),
-        ],
+      child: IconButton(
+        icon: const Icon(Icons.delete),
+        // tooltip: 'Increase volume by 10',
+        onPressed: () {
+          setState(() {});
+        },
       ),
     );
+  }
+
+  void check() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    final checkvalue = pref.get('user') ?? 0;
+    if (checkvalue != 0) {
+      getUsername();
+    }
+  }
+
+  void getUsername() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      var username = pref.getInt('user');
+      userID = username;
+      print(userID);
+      getTransection();
+    });
+  }
+
+  Future getTransection() async {
+    var url = Uri.http(urlH(), '/api/transection/$userID');
+    var response = await http.get(url);
+    // var result = json.decode(response.body);
+    var result = utf8.decode(response.bodyBytes);
+    setState(() {
+      incomeItem = json.decode(result);
+      for (int i = 0; i < incomeItem.length; i++) {
+        if (incomeItem[i]['transtype'] == 'Income') {
+          totalIncome += double.parse(incomeItem[i]['amount']);
+        } else if (incomeItem[i]['transtype'] == 'Expense') {
+          totalExpense += double.parse(incomeItem[i]['amount']);
+        }
+      }
+      print(totalIncome);
+      print(totalExpense);
+      totalBalance = totalIncome - totalExpense;
+      print("Total ${totalBalance}");
+    });
   }
 }
