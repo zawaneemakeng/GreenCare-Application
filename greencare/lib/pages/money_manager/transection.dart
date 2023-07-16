@@ -209,27 +209,25 @@ class _AllTransectionState extends State<AllTransection> {
         itemBuilder: (context, int index) {
           final reversedIndex = incomeItem.length - 1 - index;
           if (incomeItem[reversedIndex]['transtype'] == 'Income') {
-            return Container(
-              margin: EdgeInsets.only(
-                left: 20,
-                right: 20,
-                top: 15,
-              ),
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Slidable(
-                endActionPane: ActionPane(
-                  extentRatio: 0.4,
-                  motion: DrawerMotion(),
-                  children: [
-                    SlidableAction(
+            return Slidable(
+              endActionPane: ActionPane(
+                extentRatio: 0.4,
+                motion: ScrollMotion(),
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 15),
+                    height: 70,
+                    width: 65,
+                    child: SlidableAction(
+                        padding: EdgeInsets.only(left: 4),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8.0),
+                          bottomLeft: Radius.circular(8.0),
+                        ),
                         autoClose: true,
                         icon: Icons.delete,
-                        backgroundColor: Color(0xffE0E0E0),
-                        foregroundColor: Colors.red,
+                        backgroundColor: Colors.redAccent,
+                        foregroundColor: Color(0xffE0E0E0),
                         onPressed: (context) => {
                               deleteTransection(incomeItem[reversedIndex]['id'])
                                   .then((value) => setState(() {
@@ -252,10 +250,20 @@ class _AllTransectionState extends State<AllTransection> {
                                         }
                                       }))
                             }),
-                    SlidableAction(
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 15),
+                    height: 70,
+                    width: 65,
+                    child: SlidableAction(
+                        padding: EdgeInsets.only(left: 4),
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(8.0),
+                          bottomRight: Radius.circular(8.0),
+                        ),
                         icon: Icons.edit,
-                        backgroundColor: Color(0xffE0E0E0),
-                        foregroundColor: Colors.green,
+                        backgroundColor: const Color.fromARGB(255, 96, 185, 99),
+                        foregroundColor: Color(0xffE0E0E0),
                         onPressed: (context) => {
                               Navigator.push(
                                   context,
@@ -291,7 +299,19 @@ class _AllTransectionState extends State<AllTransection> {
                                 },
                               )
                             }),
-                  ],
+                  ),
+                ],
+              ),
+              child: Container(
+                margin: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                  top: 15,
+                ),
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Color(0xffE6E6E6),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -326,26 +346,24 @@ class _AllTransectionState extends State<AllTransection> {
               ),
             );
           } else if (incomeItem[reversedIndex]['transtype'] == 'Expense') {
-            return Container(
-              margin: EdgeInsets.only(
-                left: 20,
-                right: 20,
-                top: 15,
-              ),
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(8.0)),
-              child: Slidable(
-                endActionPane: ActionPane(
-                  extentRatio: 0.4,
-                  motion: DrawerMotion(),
-                  children: [
-                    SlidableAction(
+            return Slidable(
+              endActionPane: ActionPane(
+                extentRatio: 0.4,
+                motion: ScrollMotion(),
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 15),
+                    height: 70,
+                    width: 65,
+                    child: SlidableAction(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8.0),
+                          bottomLeft: Radius.circular(8.0),
+                        ),
                         autoClose: true,
                         icon: Icons.delete,
-                        backgroundColor: Color(0xffE0E0E0),
-                        foregroundColor: Colors.red,
+                        backgroundColor: Colors.redAccent,
+                        foregroundColor: Color(0xffE0E0E0),
                         onPressed: (context) => {
                               deleteTransection(incomeItem[reversedIndex]['id'])
                                   .then((value) => setState(() {
@@ -368,10 +386,19 @@ class _AllTransectionState extends State<AllTransection> {
                                         }
                                       }))
                             }),
-                    SlidableAction(
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 15),
+                    height: 70,
+                    width: 65,
+                    child: SlidableAction(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(8.0),
+                          bottomRight: Radius.circular(8.0),
+                        ),
                         icon: Icons.edit,
-                        backgroundColor: Color(0xffE0E0E0),
-                        foregroundColor: Colors.green,
+                        backgroundColor: const Color.fromARGB(255, 96, 185, 99),
+                        foregroundColor: Color(0xffE0E0E0),
                         onPressed: (context) => {
                               Navigator.push(
                                   context,
@@ -392,11 +419,34 @@ class _AllTransectionState extends State<AllTransection> {
                                     totalBalance = 0.0;
                                     getTransection();
                                     print(value);
+                                    if (value == 'update') {
+                                      final snackBar = SnackBar(
+                                        content: const Text('เเก้ไขเรียบร้อย'),
+                                        action: SnackBarAction(
+                                          label: 'ปิด',
+                                          onPressed: () {},
+                                        ),
+                                      );
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
+                                    }
                                   });
                                 },
                               )
                             }),
-                  ],
+                  ),
+                ],
+              ),
+              child: Container(
+                margin: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                  top: 15,
+                ),
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Color(0xffE6E6E6),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
