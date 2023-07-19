@@ -35,7 +35,7 @@ class _HomeMainState extends State<HomeMain> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Scaffoldcheck()
+
                       // const HeaderWidget(),
                       // // for our current temp ('current')
                       // CurrentWeatherWidget(
@@ -46,8 +46,9 @@ class _HomeMainState extends State<HomeMain> {
                       // HourlyDataWidget(
                       //     weatherDataHourly:
                       //         globalController.getData().getHourlyWeather()),
-                      //WaterLevel()
+                      // WaterLevel()
                       // MyPlantWidget(),
+                      BarCharSample()
                     ],
                   ),
                 ),
