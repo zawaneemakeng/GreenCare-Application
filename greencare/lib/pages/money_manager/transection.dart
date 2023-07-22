@@ -205,61 +205,23 @@ class _AllTransectionState extends State<AllTransection> {
     return Expanded(
       child: ListView.builder(
         itemCount: incomeItem.length.clamp(0, 6),
-        shrinkWrap: false,
         itemBuilder: (context, int index) {
           final reversedIndex = incomeItem.length - 1 - index;
           if (incomeItem[reversedIndex]['transtype'] == 'Income') {
-            return Slidable(
-              endActionPane: ActionPane(
-                extentRatio: 0.4,
-                motion: ScrollMotion(),
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 15),
-                    height: 70,
-                    width: 65,
-                    child: SlidableAction(
+            return Padding(
+              padding: const EdgeInsets.only(
+                top: 15,
+              ),
+              child: Slidable(
+                endActionPane: ActionPane(
+                  extentRatio: 0.4,
+                  motion: ScrollMotion(),
+                  children: [
+                    SlidableAction(
                         padding: EdgeInsets.only(left: 4),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(8.0),
                           bottomLeft: Radius.circular(8.0),
-                        ),
-                        autoClose: true,
-                        icon: Icons.delete,
-                        backgroundColor: Colors.redAccent,
-                        foregroundColor: Color(0xffE0E0E0),
-                        onPressed: (context) => {
-                              deleteTransection(incomeItem[reversedIndex]['id'])
-                                  .then((value) => setState(() {
-                                        totalIncome = 0.0;
-                                        totalExpense = 0.0;
-                                        totalBalance = 0.0;
-                                        getTransection();
-                                        print(value);
-                                        if (value == 'deleted') {
-                                          final snackBar = SnackBar(
-                                            content: const Text('ลบสำเร็จ'),
-                                            action: SnackBarAction(
-                                              label: 'ปิด',
-                                              onPressed: () {},
-                                            ),
-                                          );
-
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackBar);
-                                        }
-                                      }))
-                            }),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 15),
-                    height: 70,
-                    width: 65,
-                    child: SlidableAction(
-                        padding: EdgeInsets.only(left: 4),
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(8.0),
-                          bottomRight: Radius.circular(8.0),
                         ),
                         icon: Icons.edit,
                         backgroundColor: const Color.fromARGB(255, 96, 185, 99),
@@ -299,102 +261,101 @@ class _AllTransectionState extends State<AllTransection> {
                                 },
                               )
                             }),
-                  ),
-                ],
-              ),
-              child: Container(
-                margin: EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                  top: 15,
-                ),
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Color(0xffE6E6E6),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  // crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.arrow_circle_down_outlined,
-                          color: Colors.green,
+                    SlidableAction(
+                        padding: EdgeInsets.only(left: 4),
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(8.0),
+                          bottomRight: Radius.circular(8.0),
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("${incomeItem[reversedIndex]['detail']}"),
-                            Text(
-                              "${incomeItem[reversedIndex]['date']}",
-                              style: TextStyle(
-                                  color: Colors.grey[600], fontSize: 12),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Text("+ ${incomeItem[reversedIndex]['amount']}",
-                        style: TextStyle(fontSize: 14)),
+                        autoClose: true,
+                        icon: Icons.delete,
+                        backgroundColor: Colors.redAccent,
+                        foregroundColor: Color(0xffE0E0E0),
+                        onPressed: (context) => {
+                              deleteTransection(incomeItem[reversedIndex]['id'])
+                                  .then((value) => setState(() {
+                                        totalIncome = 0.0;
+                                        totalExpense = 0.0;
+                                        totalBalance = 0.0;
+                                        getTransection();
+                                        print(value);
+                                        if (value == 'deleted') {
+                                          final snackBar = SnackBar(
+                                            content: const Text('ลบสำเร็จ'),
+                                            action: SnackBarAction(
+                                              label: 'ปิด',
+                                              onPressed: () {},
+                                            ),
+                                          );
+
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
+                                        }
+                                      }))
+                            }),
+                    SizedBox(
+                      width: 20,
+                    )
                   ],
+                ),
+                child: Container(
+                  margin: EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                  ),
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Color(0xffE6E6E6),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.arrow_circle_down_outlined,
+                            color: Colors.green,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("${incomeItem[reversedIndex]['detail']}"),
+                              Text(
+                                "${incomeItem[reversedIndex]['date']}",
+                                style: TextStyle(
+                                    color: Colors.grey[600], fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Text("+ ${incomeItem[reversedIndex]['amount']}",
+                          style: TextStyle(fontSize: 14)),
+                    ],
+                  ),
                 ),
               ),
             );
           } else if (incomeItem[reversedIndex]['transtype'] == 'Expense') {
-            return Slidable(
-              endActionPane: ActionPane(
-                extentRatio: 0.4,
-                motion: ScrollMotion(),
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 15),
-                    height: 70,
-                    width: 65,
-                    child: SlidableAction(
+            return Padding(
+              padding: const EdgeInsets.only(
+                top: 15,
+              ),
+              child: Slidable(
+                endActionPane: ActionPane(
+                  extentRatio: 0.4,
+                  motion: ScrollMotion(),
+                  children: [
+                    SlidableAction(
+                        padding: EdgeInsets.only(left: 4),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(8.0),
                           bottomLeft: Radius.circular(8.0),
-                        ),
-                        autoClose: true,
-                        icon: Icons.delete,
-                        backgroundColor: Colors.redAccent,
-                        foregroundColor: Color(0xffE0E0E0),
-                        onPressed: (context) => {
-                              deleteTransection(incomeItem[reversedIndex]['id'])
-                                  .then((value) => setState(() {
-                                        totalIncome = 0.0;
-                                        totalExpense = 0.0;
-                                        totalBalance = 0.0;
-                                        getTransection();
-                                        print(value);
-                                        if (value == 'deleted') {
-                                          final snackBar = SnackBar(
-                                            content: const Text('ลบสำเร็จ'),
-                                            action: SnackBarAction(
-                                              label: 'ปิด',
-                                              onPressed: () {},
-                                            ),
-                                          );
-
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackBar);
-                                        }
-                                      }))
-                            }),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 15),
-                    height: 70,
-                    width: 65,
-                    child: SlidableAction(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(8.0),
-                          bottomRight: Radius.circular(8.0),
                         ),
                         icon: Icons.edit,
                         backgroundColor: const Color.fromARGB(255, 96, 185, 99),
@@ -434,65 +395,87 @@ class _AllTransectionState extends State<AllTransection> {
                                 },
                               )
                             }),
-                  ),
-                ],
-              ),
-              child: Container(
-                margin: EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                  top: 15,
-                ),
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Color(0xffE6E6E6),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  // crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.arrow_circle_up_outlined,
-                          color: Colors.red,
+                    SlidableAction(
+                        padding: EdgeInsets.only(left: 4),
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(8.0),
+                          bottomRight: Radius.circular(8.0),
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("${incomeItem[reversedIndex]['detail']}"),
-                            Text(
-                              "${incomeItem[reversedIndex]['date']}",
-                              style: TextStyle(
-                                  color: Colors.grey[600], fontSize: 12),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Text("- ${incomeItem[reversedIndex]['amount']}",
-                        style: TextStyle(fontSize: 14)),
+                        autoClose: true,
+                        icon: Icons.delete,
+                        backgroundColor: Colors.redAccent,
+                        foregroundColor: Color(0xffE0E0E0),
+                        onPressed: (context) => {
+                              deleteTransection(incomeItem[reversedIndex]['id'])
+                                  .then((value) => setState(() {
+                                        totalIncome = 0.0;
+                                        totalExpense = 0.0;
+                                        totalBalance = 0.0;
+                                        getTransection();
+                                        print(value);
+                                        if (value == 'deleted') {
+                                          final snackBar = SnackBar(
+                                            content: const Text('ลบสำเร็จ'),
+                                            action: SnackBarAction(
+                                              label: 'ปิด',
+                                              onPressed: () {},
+                                            ),
+                                          );
+
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
+                                        }
+                                      }))
+                            }),
+                    SizedBox(
+                      width: 20,
+                    )
                   ],
+                ),
+                child: Container(
+                  margin: EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                  ),
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Color(0xffE6E6E6),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.arrow_circle_up_outlined,
+                            color: Colors.red,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("${incomeItem[reversedIndex]['detail']}"),
+                              Text(
+                                "${incomeItem[reversedIndex]['date']}",
+                                style: TextStyle(
+                                    color: Colors.grey[600], fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Text("- ${incomeItem[reversedIndex]['amount']}",
+                          style: TextStyle(fontSize: 14)),
+                    ],
+                  ),
                 ),
               ),
             );
           }
-        },
-      ),
-    );
-  }
-
-  Widget Deletetran() {
-    return Container(
-      child: IconButton(
-        icon: const Icon(Icons.delete),
-        // tooltip: 'Increase volume by 10',
-        onPressed: () {
-          setState(() {});
         },
       ),
     );
@@ -530,6 +513,7 @@ class _AllTransectionState extends State<AllTransection> {
           totalExpense += double.parse(incomeItem[i]['amount']);
         }
       }
+      print(incomeItem);
       print(totalIncome);
       print(totalExpense);
       totalBalance = totalIncome - totalExpense;
