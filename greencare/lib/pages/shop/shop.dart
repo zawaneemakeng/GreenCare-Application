@@ -63,20 +63,26 @@ class _ShopPageState extends State<ShopPage> {
           height: 40,
         ),
         CachedNetworkImage(
-          imageUrl: '"http://${urlH()}${getlast_img}',
+          imageUrl: 'http://${urlH()}/${getlast_img}',
           placeholder: (context, url) => const CircularProgressIndicator(),
           errorWidget: (context, url, error) => const Icon(
             Icons.error,
             size: 100,
             color: Colors.red,
           ),
-          imageBuilder: (context, imageProvider) => Container(
-            width: 130,
-            height: 130,
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.black, width: 1),
-                shape: BoxShape.circle,
-                image: DecorationImage(image: imageProvider, fit: BoxFit.fill)),
+          imageBuilder: (context, imageProvider) => Column(
+            children: [
+              Container(
+                width: 130,
+                height: 130,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 1),
+                  shape: BoxShape.circle,
+                  image:
+                      DecorationImage(image: imageProvider, fit: BoxFit.fill),
+                ),
+              ),
+            ],
           ),
         ),
         Positioned(
@@ -89,8 +95,8 @@ class _ShopPageState extends State<ShopPage> {
                 // enableDrag: false);
               },
               child: Icon(
-                Icons.camera_alt,
-                color: Colors.grey[600],
+                Icons.camera_alt_rounded,
+                color: Colors.grey[500],
                 size: 26,
               ),
             )),
@@ -120,7 +126,6 @@ class _ShopPageState extends State<ShopPage> {
         filename: selectedImage!.path.split("/").last));
     request.headers.addAll(headers);
     final response = await request.send();
-    http.Response res = await http.Response.fromStream(response);
     setState(() {
       fileName = selectedImage!.path.split("/").last;
       print("Name: ${fileName}");
