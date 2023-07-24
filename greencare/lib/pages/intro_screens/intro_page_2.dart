@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class IntroPage2 extends StatelessWidget {
   @override
@@ -10,11 +11,9 @@ class IntroPage2 extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/intro2.png',
-              ),
+              Lottie.asset('assets/animations/animation_lkgvjyrv.json'),
               SizedBox(
-                height: 100,
+                height: 10,
               ),
               Text(
                 'ยินดีตอนรับ ชาวดเา่ดสเนพทดเาดเดเ้อกดเีกพเแอื',

@@ -24,7 +24,7 @@ class IntroPage1 extends StatelessWidget {
               height: 80,
             ),
             Text(
-              'ยินดีตอนรับ',
+              'ยินดีตอนรับ วันนี้',
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(
