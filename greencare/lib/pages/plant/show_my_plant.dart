@@ -19,6 +19,7 @@ class _ShowPlantState extends State<ShowPlant> {
   double water_level = 70.7;
   File? selectedImage;
   List imageList = [];
+  List soilList = [];
   String fileName = "";
   String getlast_img = "";
   bool light = false;
@@ -29,6 +30,7 @@ class _ShowPlantState extends State<ShowPlant> {
   void initState() {
     super.initState();
     getImage();
+    getSoil();
   }
 
   @override
@@ -54,6 +56,19 @@ class _ShowPlantState extends State<ShowPlant> {
           Watering_OnOff()
         ],
       ),
+    );
+  }
+
+  Widget CurrentSoilMoisture() {
+    return Container(
+      height: 65,
+      width: 65,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Color(0xffE6E6E6),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Image.asset('assets/icons/humid.png'),
     );
   }
 
@@ -115,7 +130,7 @@ class _ShowPlantState extends State<ShowPlant> {
             ),
             SizedBox(
               height: 20,
-              width: 60,
+              width: 70,
               child: Text(
                 'ความชื้นในดิน',
                 style: TextStyle(fontSize: 12),
@@ -124,7 +139,7 @@ class _ShowPlantState extends State<ShowPlant> {
             ),
             SizedBox(
               height: 20,
-              width: 60,
+              width: 70,
               child: Text(
                 'น้ำคงเหลือ',
                 style: TextStyle(fontSize: 12),
@@ -139,10 +154,16 @@ class _ShowPlantState extends State<ShowPlant> {
             SizedBox(
               height: 20,
               width: 60,
-              child: Text(
-                "50%",
-                style: TextStyle(fontSize: 12),
-                textAlign: TextAlign.center,
+              child: ListView.builder(
+                itemCount: soilList.length.clamp(0, 1),
+                itemBuilder: (context, int index) {
+                  final reversedIndex = soilList.length - 1 - index;
+                  return Text(
+                    "${soilList[reversedIndex]['soilmoisture']}%",
+                    style: TextStyle(fontSize: 12),
+                    textAlign: TextAlign.center,
+                  );
+                },
               ),
             ),
             SizedBox(
@@ -202,13 +223,13 @@ class _ShowPlantState extends State<ShowPlant> {
               light == true
                   ? Image.asset(
                       "assets/power.png",
-                      width: 30,
-                      height: 30,
+                      width: 35,
+                      height: 35,
                     )
                   : Image.asset(
                       "assets/power_off.png",
-                      width: 30,
-                      height: 30,
+                      width: 34,
+                      height: 34,
                     ),
               SizedBox(
                 width: 10,
@@ -263,12 +284,12 @@ class _ShowPlantState extends State<ShowPlant> {
             children: [
               watering == true
                   ? Image.asset(
-                      "assets/watering.png",
+                      "assets/pump.png",
                       width: 30,
                       height: 30,
                     )
                   : Image.asset(
-                      "assets/power_off.png",
+                      "assets/pump_off.png",
                       width: 30,
                       height: 30,
                     ),
@@ -306,8 +327,19 @@ class _ShowPlantState extends State<ShowPlant> {
     );
   }
 
+  Future getSoil() async {
+    var url = Uri.http(urlH(), '/api/get-soilmoisture/');
+    var response = await http.get(url);
+    // var result = json.decode(response.body);
+    var result = utf8.decode(response.bodyBytes);
+    setState(() {
+      soilList = json.decode(result);
+      print(soilList);
+    });
+  }
+
   Future OpenLED(String status) async {
-    var url = Uri.http('192.168.185.205', '/?$status');
+    var url = Uri.http('ass', '/?$status');
     var response = await http.post(url);
     print(response.body);
   }
