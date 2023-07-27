@@ -16,7 +16,8 @@ class ShowPlant extends StatefulWidget {
 }
 
 class _ShowPlantState extends State<ShowPlant> {
-  double water_level = 70.7;
+  double water_level = 0.0;
+  List waterlevelList = [];
   File? selectedImage;
   List imageList = [];
   List soilList = [];
@@ -29,6 +30,7 @@ class _ShowPlantState extends State<ShowPlant> {
   @override
   void initState() {
     super.initState();
+    getWaterlevel();
     getImage();
     getSoil();
   }
@@ -45,7 +47,6 @@ class _ShowPlantState extends State<ShowPlant> {
           SizedBox(
             height: 10,
           ),
-          CurrentWeatherDetailWidget(),
           SizedBox(
             height: 20,
           ),
@@ -178,10 +179,16 @@ class _ShowPlantState extends State<ShowPlant> {
             SizedBox(
               height: 20,
               width: 60,
-              child: Text(
-                "${water_level}%",
-                style: TextStyle(fontSize: 12),
-                textAlign: TextAlign.center,
+              child: ListView.builder(
+                itemCount: waterlevelList.length.clamp(0, 1),
+                itemBuilder: (context, int index) {
+                  final reversedIndex = waterlevelList.length - 1 - index;
+                  return Text(
+                    "${waterlevelList[reversedIndex]['waterl_remaining']}%",
+                    style: TextStyle(fontSize: 12),
+                    textAlign: TextAlign.center,
+                  );
+                },
               ),
             )
           ],
@@ -335,6 +342,21 @@ class _ShowPlantState extends State<ShowPlant> {
     setState(() {
       soilList = json.decode(result);
       print(soilList);
+    });
+  }
+
+  Future getWaterlevel() async {
+    var url = Uri.http(urlH(), '/api/get-waterlevel/');
+    var response = await http.get(url);
+    // var result = json.decode(response.body);
+    var result = utf8.decode(response.bodyBytes);
+    setState(() {
+      waterlevelList = json.decode(result);
+      final reversedIndex = waterlevelList.length - 1;
+      double a =
+          double.parse(waterlevelList[reversedIndex]['waterl_remaining']);
+      water_level = a;
+      print(" WATERLEVEL : ${water_level}");
     });
   }
 
