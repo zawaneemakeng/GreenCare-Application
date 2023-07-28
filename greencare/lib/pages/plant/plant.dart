@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:greencare/pages/plant/add_plants.dart';
 import 'package:greencare/pages/plant/show_my_plant.dart';
@@ -6,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:greencare/utils/api_url.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class PlantPage extends StatefulWidget {
   const PlantPage({super.key});
@@ -18,10 +21,33 @@ class _PlantPageState extends State<PlantPage> {
   List plantsItems = [];
   int? userID;
   bool isButtonEnabled = false;
+  double water_level = 0.0;
+  List waterlevelList = [];
+  List imageList = [];
+  List soilList = [];
+  bool light = false;
+  bool watering = false;
+  String? status;
+  Timer? timer;
+  Future refresh() async {
+    timer = Timer.periodic(
+        Duration(seconds: 10),
+        (Timer t) => setState(() {
+              getWaterlevel();
+            }));
+  }
+
   @override
   void initState() {
     super.initState();
+    getWaterlevel();
+    getSoil();
     check();
+    timer = Timer.periodic(
+        Duration(seconds: 10),
+        (Timer t) => setState(() {
+              getWaterlevel();
+            }));
   }
 
   @override
@@ -80,7 +106,7 @@ class _PlantPageState extends State<PlantPage> {
               child: Text('ฟาร์มของคุณ',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
             ),
-            ShowPlant(),
+            CurrentWeatherDetailWidget(),
             Plants(),
           ],
         ),
@@ -132,6 +158,7 @@ class _PlantPageState extends State<PlantPage> {
   Widget Plants() {
     return Expanded(
       child: ListView.builder(
+          physics: const AlwaysScrollableScrollPhysics(),
           itemCount: plantsItems.length.clamp(0, 6),
           shrinkWrap: false,
           itemBuilder: (context, int index) {
@@ -215,6 +242,156 @@ class _PlantPageState extends State<PlantPage> {
                   );
           }),
     );
+  }
+
+  Widget CurrentWeatherDetailWidget() {
+    return Column(
+      children: [
+        SizedBox(height: 20),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+          Container(
+            height: 65,
+            width: 65,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: Color(0xffE6E6E6),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Image.asset('assets/icons/humid.png'),
+          ),
+          Container(
+            height: 65,
+            width: 65,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+                color: Color(0xffE6E6E6),
+                borderRadius: BorderRadius.circular(15)),
+            child: Image.asset('assets/leaf.png'),
+          ),
+          Container(
+            height: 65,
+            width: 65,
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+                color: Color(0xffE6E6E6),
+                borderRadius: BorderRadius.circular(15)),
+            child: CircularPercentIndicator(
+              percent: water_level / 100,
+              radius: 20,
+              lineWidth: 7,
+              animation: true,
+              progressColor: Colors.blueAccent,
+              backgroundColor: Colors.white,
+            ),
+          ),
+        ]),
+        SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            SizedBox(
+              height: 20,
+              width: 70,
+              child: Text(
+                'ความชื้นในดิน',
+                style: TextStyle(fontSize: 12),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+              width: 70,
+              child: Text(
+                'ความชื้นในดิน',
+                style: TextStyle(fontSize: 12),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+              width: 70,
+              child: Text(
+                'น้ำคงเหลือ',
+                style: TextStyle(fontSize: 12),
+                textAlign: TextAlign.center,
+              ),
+            )
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            SizedBox(
+              height: 20,
+              width: 60,
+              child: ListView.builder(
+                itemCount: soilList.length.clamp(0, 1),
+                itemBuilder: (context, int index) {
+                  final reversedIndex = soilList.length - 1 - index;
+                  return Text(
+                    "${soilList[reversedIndex]['soilmoisture']}%",
+                    style: TextStyle(fontSize: 12),
+                    textAlign: TextAlign.center,
+                  );
+                },
+              ),
+            ),
+            SizedBox(
+              height: 20,
+              width: 60,
+              child: Text(
+                "weatherDataCurrent.current.windSpeed",
+                style: TextStyle(fontSize: 12),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+              width: 60,
+              child: ListView.builder(
+                itemCount: waterlevelList.length.clamp(0, 1),
+                itemBuilder: (context, int index) {
+                  final reversedIndex = waterlevelList.length - 1 - index;
+                  return Text(
+                    "${waterlevelList[reversedIndex]['waterl_remaining']}%",
+                    style: TextStyle(fontSize: 12),
+                    textAlign: TextAlign.center,
+                  );
+                },
+              ),
+            )
+          ],
+        )
+      ],
+    );
+  }
+
+  Future getSoil() async {
+    var url = Uri.http(urlH(), '/api/get-soilmoisture/');
+    var response = await http.get(url);
+    // var result = json.decode(response.body);
+    var result = utf8.decode(response.bodyBytes);
+    setState(() {
+      soilList = json.decode(result);
+      print(soilList);
+    });
+  }
+
+  Future getWaterlevel() async {
+    var url = Uri.http(urlH(), '/api/get-waterlevel/');
+    var response = await http.get(url);
+    // var result = json.decode(response.body);
+    var result = utf8.decode(response.bodyBytes);
+    setState(() {
+      waterlevelList = json.decode(result);
+      final reversedIndex = waterlevelList.length - 1;
+      double a =
+          double.parse(waterlevelList[reversedIndex]['waterl_remaining']);
+      water_level = a;
+      print(" WATERLEVEL : ${water_level}");
+    });
   }
 
   void check() async {
