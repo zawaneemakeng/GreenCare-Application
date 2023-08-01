@@ -20,6 +20,7 @@ class _UpdatePlantState extends State<UpdatePlant> {
   var detail = TextEditingController();
   bool? status;
   String fulldate = "";
+
   @override
   void initState() {
     // TODO: implement initState
