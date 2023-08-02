@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:greencare/utils/api_url.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -57,53 +56,20 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   Widget imageProfile() {
-    return Center(
-      child: Stack(children: <Widget>[
-        SizedBox(
-          height: 40,
-        ),
-        CachedNetworkImage(
-          imageUrl: 'http://${urlH()}/${getlast_img}',
-          placeholder: (context, url) => const CircularProgressIndicator(),
-          errorWidget: (context, url, error) => const Icon(
-            Icons.error,
-            size: 100,
-            color: Colors.red,
-          ),
-          imageBuilder: (context, imageProvider) => Column(
-            children: [
-              Container(
-                width: 130,
-                height: 130,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 1),
-                  shape: BoxShape.circle,
-                  image:
-                      DecorationImage(image: imageProvider, fit: BoxFit.fill),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Positioned(
-            bottom: 15.0,
-            right: 20.0,
-            child: InkWell(
-              onTap: () {
-                showBottomSheet(
-                    context: this.context, builder: (builder) => bottomSheet());
-                // enableDrag: false);
-              },
-              child: Icon(
-                Icons.camera_alt_rounded,
-                color: Colors.grey[500],
-                size: 26,
-              ),
-            )),
-        SizedBox(
-          height: 100,
-        )
-      ]),
+    return Container(
+      width: 130,
+      height: 130,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black, width: 0),
+        shape: BoxShape.circle,
+        image: DecorationImage(
+            image: NetworkImage("http://192.168.17.152:8000/${getlast_img}"),
+            fit: BoxFit.fill),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 70, top: 60),
+        child: showDialogPhoto(),
+      ),
     );
   }
 
@@ -133,34 +99,71 @@ class _ShopPageState extends State<ShopPage> {
     });
   }
 
-  Widget bottomSheet() {
-    return Container(
-      height: 100.0,
-      width: MediaQuery.of(this.context).size.width,
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: Column(
-        children: <Widget>[
-          Text("fdkfldfk"),
-          SizedBox(
-            height: 20,
-          ),
-          Row(
-            children: <Widget>[
-              TextButton.icon(
-                  onPressed: () {
-                    _getImage(ImageSource.camera);
-                  },
-                  icon: Icon(Icons.camera_alt),
-                  label: Text("camera")),
-              TextButton.icon(
-                  onPressed: () {
-                    _getImage(ImageSource.gallery);
-                  },
-                  icon: Icon(Icons.browse_gallery),
-                  label: Text("gallery")),
+  Widget showDialogPhoto() {
+    return IconButton(
+      onPressed: () => showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16.0))),
+          surfaceTintColor: Color(0xff3AAA94),
+          backgroundColor: Colors.white,
+          title: const Text('กรุณาเลือกจ้า'),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                height: 70,
+                width: 60,
+                child: Column(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        _getImage(ImageSource.camera);
+                      },
+                      icon: Icon(Icons.camera_alt,
+                          size: 28, color: Colors.grey[700]),
+                    ),
+                    Text(
+                      "camera",
+                      style: TextStyle(color: Colors.grey[700], fontSize: 14),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: 70,
+                width: 60,
+                child: Column(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        _getImage(ImageSource.gallery);
+                      },
+                      icon: Icon(Icons.photo_sharp,
+                          size: 28, color: Colors.grey[700]),
+                    ),
+                    Text(
+                      "gallery",
+                      style: TextStyle(color: Colors.grey[700], fontSize: 14),
+                    ),
+                  ],
+                ),
+              ),
             ],
-          )
-        ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('ยกเลิก', style: TextStyle(fontSize: 16)),
+            ),
+          ],
+        ),
+      ),
+      icon: Icon(
+        Icons.camera_alt,
+        size: 26,
+        color: Colors.grey[400],
       ),
     );
   }
