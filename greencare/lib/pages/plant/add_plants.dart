@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:get/get.dart';
-import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
+import 'package:greencare/utils/api_url.dart';
 
 class AddPlants extends StatefulWidget {
   const AddPlants({super.key});
@@ -82,7 +82,6 @@ class _AddPlantsState extends State<AddPlants> {
                   width: 285,
                   child: TextField(
                     controller: plantstype,
-                    keyboardType: TextInputType.number,
                     cursorColor: Colors.grey,
                     style: TextStyle(
                       color: Colors.black54,
@@ -92,7 +91,7 @@ class _AddPlantsState extends State<AddPlants> {
                         Icons.money,
                         color: Color.fromARGB(255, 133, 133, 133),
                       ),
-                      hintText: 'จำนวนเงิน',
+                      hintText: 'ชื่อพืช',
                       border: InputBorder.none,
                     ),
                   ),
@@ -126,7 +125,7 @@ class _AddPlantsState extends State<AddPlants> {
                         Icons.note,
                         color: Color.fromARGB(255, 133, 133, 133),
                       ),
-                      hintText: 'โน้ตค่าใช้จ่าย',
+                      hintText: 'โน้ต',
                       border: InputBorder.none,
                     ),
                   ),
@@ -176,7 +175,7 @@ class _AddPlantsState extends State<AddPlants> {
                       width: 12.0,
                     ),
                     Text(
-                      "วันที่ปลูก",
+                      "${selectedDate.day} ${months[selectedDate.month - 1]} ${selectedDate.year + 543 - 2500}",
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.grey[700],
@@ -194,15 +193,22 @@ class _AddPlantsState extends State<AddPlants> {
                 thickness: 1,
               ),
             ),
+            const Padding(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: Divider(
+                height: 1,
+                color: Colors.grey,
+                thickness: 1,
+              ),
+            ),
             SizedBox(
               height: 30.0,
             ),
             Checkbox(
               value: status,
-              onChanged: (value) {
+              onChanged: (bool? value) {
                 setState(() {
-                  status = true;
-                  print(status);
+                  status = value!;
                 });
               },
             ),
@@ -211,7 +217,16 @@ class _AddPlantsState extends State<AddPlants> {
               padding: const EdgeInsets.only(left: 80.0, right: 80.0),
               child: ElevatedButton(
                 onPressed: () {
+                  setState(() {
+                    fulldate =
+                        "${selectedDate.day} ${months[selectedDate.month - 1]} ${selectedDate.year + 543 - 2500}";
+                  });
                   postTodo();
+                  String t2 = "${plantstype.text}";
+                  String t3 = "${detail.text}";
+                  String t4 = "${fulldate}";
+                  bool t5 = status;
+                  print('${t2} ${t3} ${t4} ${t5}');
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xff3AAA94),
@@ -250,14 +265,14 @@ class _AddPlantsState extends State<AddPlants> {
 
   Future postTodo() async {
     // var url = Uri.https('abcd.ngrok.io', '/api/post-todolist');
-    var url = Uri.http('000000:8000', 'add/newplants');
+    var url = Uri.http(urlH(), 'add/newplants');
     Map<String, String> header = {"Content-type": "application/json"};
-    String t2 = "ผักชี";
-    String t3 = "บลาๆ";
-    String t4 = "5 มี.ค. 66";
-    bool t5 = true;
+    String t2 = "${plantstype.text}";
+    String t3 = "${detail.text}";
+    String t4 = "${fulldate}";
+    bool t5 = status;
 
-    String v1 = '"user":"${6}"';
+    String v1 = '"user":"${userID}"';
     String v2 = '"plantstype":"${t2}"';
     String v3 = '"detail":"${t3}"';
     String v4 = '"date":"${t4}"';
