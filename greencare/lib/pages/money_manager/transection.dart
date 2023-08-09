@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:greencare/pages/money_manager/add_transection.dart';
-import 'package:greencare/pages/money_manager/delete_transection.dart';
-import 'package:greencare/pages/money_manager/update_transection.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:rotnaam/pages/money_manage/add_transection.dart';
+import 'package:rotnaam/pages/money_manage/delete_transection.dart';
+import 'package:rotnaam/pages/money_manage/update_transection.dart';
+import 'package:rotnaam/utils/api_url.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:greencare/utils/api_url.dart';
 
 class AllTransection extends StatefulWidget {
   const AllTransection({super.key});
@@ -21,7 +21,7 @@ class _AllTransectionState extends State<AllTransection> {
   double totalExpense = 0.0;
   double totalBalance = 0.0;
 
-  List incomeItem = [];
+  List transactionItem = [];
   List expenseItem = [];
   int? userID;
   double? total;
@@ -204,10 +204,10 @@ class _AllTransectionState extends State<AllTransection> {
   Widget transTile() {
     return Expanded(
       child: ListView.builder(
-        itemCount: incomeItem.length.clamp(0, 6),
+        itemCount: transactionItem.length.clamp(0, 6),
         itemBuilder: (context, int index) {
-          final reversedIndex = incomeItem.length - 1 - index;
-          if (incomeItem[reversedIndex]['transtype'] == 'Income') {
+          final reversedIndex = transactionItem.length - 1 - index;
+          if (transactionItem[reversedIndex]['transtype'] == 'Income') {
             return Padding(
               padding: const EdgeInsets.only(
                 top: 15,
@@ -231,12 +231,16 @@ class _AllTransectionState extends State<AllTransection> {
                                   context,
                                   MaterialPageRoute(
                                       builder: ((context) => UpdateTransition(
-                                            incomeItem[reversedIndex]['id'],
-                                            incomeItem[reversedIndex]['amount'],
-                                            incomeItem[reversedIndex]['detail'],
-                                            incomeItem[reversedIndex]
+                                            transactionItem[reversedIndex]
+                                                ['id'],
+                                            transactionItem[reversedIndex]
+                                                ['amount'],
+                                            transactionItem[reversedIndex]
+                                                ['detail'],
+                                            transactionItem[reversedIndex]
                                                 ['transtype'],
-                                            incomeItem[reversedIndex]['date'],
+                                            transactionItem[reversedIndex]
+                                                ['date'],
                                           )))).then(
                                 (value) {
                                   //.then ตือให้ทำอะไรถ้ากลับมา
@@ -272,7 +276,8 @@ class _AllTransectionState extends State<AllTransection> {
                         backgroundColor: Colors.redAccent,
                         foregroundColor: Color(0xffE0E0E0),
                         onPressed: (context) => {
-                              deleteTransection(incomeItem[reversedIndex]['id'])
+                              deleteTransection(
+                                      transactionItem[reversedIndex]['id'])
                                   .then((value) => setState(() {
                                         totalIncome = 0.0;
                                         totalExpense = 0.0;
@@ -324,9 +329,10 @@ class _AllTransectionState extends State<AllTransection> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("${incomeItem[reversedIndex]['detail']}"),
                               Text(
-                                "${incomeItem[reversedIndex]['date']}",
+                                  "${transactionItem[reversedIndex]['detail']}"),
+                              Text(
+                                "${transactionItem[reversedIndex]['date']}",
                                 style: TextStyle(
                                     color: Colors.grey[600], fontSize: 12),
                               ),
@@ -334,14 +340,14 @@ class _AllTransectionState extends State<AllTransection> {
                           ),
                         ],
                       ),
-                      Text("+ ${incomeItem[reversedIndex]['amount']}",
+                      Text("+ ${transactionItem[reversedIndex]['amount']}",
                           style: TextStyle(fontSize: 14)),
                     ],
                   ),
                 ),
               ),
             );
-          } else if (incomeItem[reversedIndex]['transtype'] == 'Expense') {
+          } else if (transactionItem[reversedIndex]['transtype'] == 'Expense') {
             return Padding(
               padding: const EdgeInsets.only(
                 top: 15,
@@ -365,12 +371,16 @@ class _AllTransectionState extends State<AllTransection> {
                                   context,
                                   MaterialPageRoute(
                                       builder: ((context) => UpdateTransition(
-                                            incomeItem[reversedIndex]['id'],
-                                            incomeItem[reversedIndex]['amount'],
-                                            incomeItem[reversedIndex]['detail'],
-                                            incomeItem[reversedIndex]
+                                            transactionItem[reversedIndex]
+                                                ['id'],
+                                            transactionItem[reversedIndex]
+                                                ['amount'],
+                                            transactionItem[reversedIndex]
+                                                ['detail'],
+                                            transactionItem[reversedIndex]
                                                 ['transtype'],
-                                            incomeItem[reversedIndex]['date'],
+                                            transactionItem[reversedIndex]
+                                                ['date'],
                                           )))).then(
                                 (value) {
                                   //.then ตือให้ทำอะไรถ้ากลับมา
@@ -406,7 +416,8 @@ class _AllTransectionState extends State<AllTransection> {
                         backgroundColor: Colors.redAccent,
                         foregroundColor: Color(0xffE0E0E0),
                         onPressed: (context) => {
-                              deleteTransection(incomeItem[reversedIndex]['id'])
+                              deleteTransection(
+                                      transactionItem[reversedIndex]['id'])
                                   .then((value) => setState(() {
                                         totalIncome = 0.0;
                                         totalExpense = 0.0;
@@ -458,9 +469,10 @@ class _AllTransectionState extends State<AllTransection> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("${incomeItem[reversedIndex]['detail']}"),
                               Text(
-                                "${incomeItem[reversedIndex]['date']}",
+                                  "${transactionItem[reversedIndex]['detail']}"),
+                              Text(
+                                "${transactionItem[reversedIndex]['date']}",
                                 style: TextStyle(
                                     color: Colors.grey[600], fontSize: 12),
                               ),
@@ -468,7 +480,7 @@ class _AllTransectionState extends State<AllTransection> {
                           ),
                         ],
                       ),
-                      Text("- ${incomeItem[reversedIndex]['amount']}",
+                      Text("- ${transactionItem[reversedIndex]['amount']}",
                           style: TextStyle(fontSize: 14)),
                     ],
                   ),
@@ -500,20 +512,19 @@ class _AllTransectionState extends State<AllTransection> {
   }
 
   Future getTransection() async {
-    var url = Uri.http(urlH(), '/api/transection/$userID');
+    var url = Uri.http(host(), "${gettransaction()}/${userID}");
     var response = await http.get(url);
-    // var result = json.decode(response.body);
     var result = utf8.decode(response.bodyBytes);
     setState(() {
-      incomeItem = json.decode(result);
-      for (int i = 0; i < incomeItem.length; i++) {
-        if (incomeItem[i]['transtype'] == 'Income') {
-          totalIncome += double.parse(incomeItem[i]['amount']);
-        } else if (incomeItem[i]['transtype'] == 'Expense') {
-          totalExpense += double.parse(incomeItem[i]['amount']);
+      transactionItem = json.decode(result);
+      for (int i = 0; i < transactionItem.length; i++) {
+        if (transactionItem[i]['transtype'] == 'Income') {
+          totalIncome += double.parse(transactionItem[i]['amount']);
+        } else if (transactionItem[i]['transtype'] == 'Expense') {
+          totalExpense += double.parse(transactionItem[i]['amount']);
         }
       }
-      print(incomeItem);
+      print(transactionItem);
       print(totalIncome);
       print(totalExpense);
       totalBalance = totalIncome - totalExpense;
