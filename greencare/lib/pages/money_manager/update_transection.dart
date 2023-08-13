@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:rotnaam/utils/api_url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:greencare/utils/api_url.dart';
-import 'package:greencare/utils/api_url.dart';
 
 class UpdateTransition extends StatefulWidget {
   final v1, v2, v3, v4, v5;
@@ -49,10 +48,10 @@ class _UpdateTransitionState extends State<UpdateTransition> {
     super.initState();
     getuser_id();
     _v1 = widget.v1; //id
-    _v2 = widget.v2; //title
-    _v3 = widget.v3; //details
+    _v2 = widget.v2; //amount
+    _v3 = widget.v3; //detail
     _v4 = widget.v4;
-    _v5 = widget.v5;
+    _v5 = widget.v5; //date
     amount.text = _v2;
     note.text = _v3;
     type = _v4;
@@ -80,7 +79,7 @@ class _UpdateTransitionState extends State<UpdateTransition> {
               ],
             ),
             Text(
-              "Add Transaction",
+              "เเก้ไขข้อมูลการเงิน",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 32.0,
@@ -283,7 +282,7 @@ class _UpdateTransitionState extends State<UpdateTransition> {
                       width: 12.0,
                     ),
                     Text(
-                      "${selectedDate.day} ${months[selectedDate.month - 1]} ${selectedDate.year + 543 - 2500}",
+                      "${fulldate}",
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.grey[700],
@@ -344,7 +343,7 @@ class _UpdateTransitionState extends State<UpdateTransition> {
 
   Future updateTodo(BuildContext context) async {
     // var url = Uri.https('abcd.ngrok.io', '/api/post-todolist');
-    var url = Uri.http(urlH(), 'api/update-transection/$_v1');
+    var url = Uri.http(host(), 'api/update-transection/$_v1');
     Map<String, String> header = {"Content-type": "application/json"};
 
     String t1 = '"user":"${userID}"';
