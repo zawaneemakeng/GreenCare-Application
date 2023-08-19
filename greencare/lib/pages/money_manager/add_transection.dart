@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
+import 'package:rotnaam/utils/api_url.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+import 'dart:async';
 
 class AddTransection extends StatefulWidget {
   const AddTransection({super.key});
@@ -11,23 +18,32 @@ class AddTransection extends StatefulWidget {
 class _AddTransectionState extends State<AddTransection> {
   DateTime selectedDate = DateTime.now();
   var amount = TextEditingController();
-  String note = "Expense";
+  var note = TextEditingController();
   String type = "Income";
-
+  var userID;
+  String fulldate = "";
   List<String> months = [
-    "มกราคม",
-    "กุมภาพันธ์",
-    "มีนาคม",
-    "เมษายน",
-    "พฤษภาคม",
-    "มิถุนายน",
-    "กรกฎาคม",
-    "สิงหาคม",
-    "กันยายน",
-    "ตุลาคม",
-    "พฤศจิกายน",
-    "ธันวาคม"
+    "ม.ค.",
+    "ก.พ.",
+    "มี.ค.",
+    "เม.ย.",
+    "พ.ค.",
+    "มิ.ย.",
+    "ก.ค.",
+    "ส.ค.",
+    "ก.ย.",
+    "ต.ค.",
+    "พ.ย.",
+    "ธ.ค."
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    check();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +57,7 @@ class _AddTransectionState extends State<AddTransection> {
                   icon: Image.asset('assets/back.png', height: 35, width: 35),
                   iconSize: 50,
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pop(context, 'refresh');
                   },
                 ),
               ],
@@ -92,6 +108,7 @@ class _AddTransectionState extends State<AddTransection> {
             SizedBox(
               height: 10.0,
             ),
+
             Row(
               children: [
                 Container(
@@ -130,9 +147,6 @@ class _AddTransectionState extends State<AddTransection> {
                       if (val) {
                         setState(() {
                           type = "Income";
-                          if (note.isEmpty || note == "Expense") {
-                            note = 'Income';
-                          }
                         });
                       }
                     },
@@ -164,10 +178,6 @@ class _AddTransectionState extends State<AddTransection> {
                       if (val) {
                         setState(() {
                           type = "Expense";
-
-                          if (note.isEmpty || note == "Income") {
-                            note = 'Expense';
-                          }
                         });
                       }
                     },
@@ -196,7 +206,7 @@ class _AddTransectionState extends State<AddTransection> {
                 Container(
                   width: 285,
                   child: TextField(
-                    // controller: note,
+                    controller: note,
                     cursorColor: Colors.grey,
                     style: TextStyle(
                       color: Colors.black54,
@@ -256,7 +266,7 @@ class _AddTransectionState extends State<AddTransection> {
                       width: 12.0,
                     ),
                     Text(
-                      "${selectedDate.day} ${months[selectedDate.month - 1]}",
+                      "${selectedDate.day} ${months[selectedDate.month - 1]} ${selectedDate.year + 543 - 2500}",
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.grey[700],
@@ -282,9 +292,21 @@ class _AddTransectionState extends State<AddTransection> {
               child: ElevatedButton(
                 onPressed: () {
                   print("Amout: ${amount.text}");
-                  print(note);
-                  // precacheImage(type);
-                  print("Selected date: ${selectedDate}");
+                  print('Type:${type}');
+                  if (note.text == "") {
+                    note.text = type;
+                  }
+                  print("Note: ${note.text}");
+                  print(
+                      "Selected date: ${selectedDate.day}-${months[selectedDate.month - 1]}-${selectedDate.year + 543}");
+                  setState(() {
+                    fulldate =
+                        "${selectedDate.day} ${months[selectedDate.month - 1]} ${selectedDate.year + 543 - 2500}";
+                  });
+                  setState(() {
+                    addTransaction(context);
+                  });
+                  note.clear();
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xff3AAA94),
@@ -292,7 +314,7 @@ class _AddTransectionState extends State<AddTransection> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50))),
                 child: const Text(
-                  'Submit',
+                  'บันทึก',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -319,5 +341,37 @@ class _AddTransectionState extends State<AddTransection> {
         selectedDate = picked;
       });
     }
+  }
+
+  Future addTransaction(BuildContext context) async {
+    var url = Uri.http(host(), addtransaction());
+    Map<String, String> header = {"Content-type": "application/json"};
+    String v1 = '"user":"${userID}"';
+    String v2 = '"amount":"${amount.text}"';
+    String v3 = '"detail":"${note.text}"';
+    String v4 = '"transtype":"${type}"';
+    String v5 = '"date":"${fulldate}"';
+    String jsondata = '{$v1,$v2,$v3,$v4,$v5}';
+    var response = await http.post(url, headers: header, body: jsondata);
+    print('--------result--------');
+    print(response.body);
+    Navigator.pop(context, 'refresh');
+  }
+
+  void check() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    final checkvalue = pref.get('user') ?? 0;
+    if (checkvalue != 0) {
+      getUsername();
+    }
+  }
+
+  void getUsername() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      var username = pref.getInt('user');
+      userID = username;
+      print(userID);
+    });
   }
 }
