@@ -9,7 +9,7 @@ class IntroPage1 extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/leaf.png',
+              'assets/nature.png',
               width: 180,
               height: 180,
             ),
@@ -17,15 +17,11 @@ class IntroPage1 extends StatelessWidget {
               height: 30,
             ),
             Text(
-              'GREENCARE',
+              'ROTNAAM',
               style: TextStyle(fontSize: 30),
             ),
             SizedBox(
               height: 80,
-            ),
-            Text(
-              'ยินดีตอนรับ วันนี้',
-              style: TextStyle(fontSize: 20),
             ),
             SizedBox(
               height: 50,
