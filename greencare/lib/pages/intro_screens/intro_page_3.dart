@@ -11,7 +11,7 @@ class IntroPage3 extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Lottie.asset('assets/animations/animation_lkgw778g.json'),
+              Lottie.asset('assets/animations/animation_lkuuqzk9.json'),
               SizedBox(
                 height: 10,
               ),
