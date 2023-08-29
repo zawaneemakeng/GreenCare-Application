@@ -1,16 +1,12 @@
-# greencare
+# Rotnaam
 
 A new Flutter project.
+Develop an IoT-based farm automation system for remote management, utilizing an ESP32 board as the controller, <br />Flutter for dynamic mobile interfaces, and Django for the backend.<br />
 
-## Getting Started
+Last update 29/8/2023
 
-This project is a starting point for a Flutter application.
+https://github.com/zawaneemakeng/GreenCare-Application/assets/89334887/d0ea8f8a-e35d-4165-a0ae-0b34abc0199e
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+https://github.com/zawaneemakeng/GreenCare-Application/assets/89334887/6aa8c139-44bc-4120-ab1b-88798f7832fc
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
