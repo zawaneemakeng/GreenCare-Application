@@ -1,6 +1,6 @@
 # Rotnaam 🍃 💦
 
-A Flutter project.🍀
+A Flutter project.🍀<br />
 Develop an IoT-based farm automation system for remote management, utilizing an ESP32 board as the controller, <br />Flutter for dynamic mobile interfaces, and Django for the backend.<br />
 
 Last update 29/8/2023
