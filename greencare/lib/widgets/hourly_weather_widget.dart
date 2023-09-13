@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:greencare/controller/global_controller.dart';
-import 'package:greencare/model/weather_data_hourly.dart';
+
 import 'package:get/get.dart';
-import 'package:greencare/utils/custom_color.dart';
+
 import 'package:intl/intl.dart';
+import 'package:rotnaam/controller/global_controller.dart';
+import 'package:rotnaam/model/weather_data_hourly.dart';
+import 'package:rotnaam/utils/custom.dart';
 
 class HourlyDataWidget extends StatefulWidget {
   final WeatherDataHourly weatherDataHourly;
@@ -25,9 +27,12 @@ class _HourlyDataWidgetState extends State<HourlyDataWidget> {
         Container(
           margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
           alignment: Alignment.topCenter,
-          child: Text(
-            "วันนี้",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 14),
+            child: Text(
+              "สภาพอากาศวันนี้",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
           ),
         ),
         hourlyList(),
