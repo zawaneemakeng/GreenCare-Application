@@ -194,12 +194,10 @@ class _ProfilePageState extends State<ProfilePage> {
               borderRadius: BorderRadius.all(Radius.circular(16.0))),
           surfaceTintColor: Color(0xff3AAA94),
           backgroundColor: Colors.white,
-          title: const Text('กรุณาเลือกจ้า'),
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
-                height: 70,
                 width: 60,
                 child: Column(
                   children: [
