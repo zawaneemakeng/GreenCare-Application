@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rotnaam/pages/question_answer/comment.dart';
+import 'package:rotnaam/pages/question_answer/update_post.dart';
 import 'package:rotnaam/utils/api_url.dart';
 import 'package:rotnaam/utils/custom.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,7 +37,7 @@ class _CommunityPageState extends State<CommunityPage> {
     "ธ.ค."
   ];
   String formattedDateTime() {
-    DateTime now = new DateTime.now();
+    DateTime now = DateTime.now();
     return now.day.toString() +
         " " +
         months[now.month - 1] +
@@ -57,32 +58,13 @@ class _CommunityPageState extends State<CommunityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: SizedBox(
-            height: 45,
-            width: 45,
-            child: FittedBox(
-              child: FloatingActionButton(
-                onPressed: () async {
-                  _dialogBuilder(context);
-                },
-                backgroundColor: const Color(0xff3AAA94),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50.0)),
-                child: const Icon(
-                  Icons.post_add,
-                  size: 30.0,
-                  color: Colors.white,
-                ),
-              ),
-            )),
-      ),
       body: Column(
         children: [
           // CommuTile(),
-          post(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: post(),
+          ),
           posttailwidget()
         ],
       ),
@@ -91,39 +73,71 @@ class _CommunityPageState extends State<CommunityPage> {
 
   Widget post() {
     return Container(
-      padding: EdgeInsets.fromLTRB(12, 8, 12, 0),
-      color: Colors.white,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+      ),
+      padding: EdgeInsets.only(top: 10, bottom: 10),
       child: Column(children: [
-        Row(
-          children: [
-            Container(
-                padding: const EdgeInsets.all(4),
-                decoration: const BoxDecoration(
-                    color: Colors.green, shape: BoxShape.circle),
-                child: const Icon(Icons.person)),
-            SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: TextField(
-                decoration:
-                    InputDecoration.collapsed(hintText: 'คุณต้องการถามอะไร'),
+        Padding(
+          padding: const EdgeInsets.only(left: 12, right: 12),
+          child: Row(
+            children: [
+              Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                      color: Color(0xff3AAA94), shape: BoxShape.circle),
+                  child: const Icon(Icons.person)),
+              const SizedBox(
+                width: 10,
+                height: 50,
               ),
-            ),
-          ],
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: TextField(
+                    controller: q,
+                    decoration: InputDecoration.collapsed(
+                        hintText: 'คุณต้องการถามอะไร'),
+                    maxLines: 2,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         Divider(
           thickness: 0.5,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextButton.icon(
-                onPressed: () {},
-                icon: Icon(Icons.photo_library),
-                label: Text('ภาพ')),
-            TextButton(onPressed: () {}, child: Text('โพสต์'))
-          ],
+        Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                width: 80,
+                height: 30,
+                child: ElevatedButton(
+                  onPressed: () {
+                    addQuestion();
+                    q.clear();
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: ButtonColor.bgcolor,
+                      fixedSize: const Size(80, 10),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40))),
+                  child: const Text(
+                    'โพสต์',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              Divider(
+                thickness: 0.5,
+              ),
+            ],
+          ),
         )
       ]),
     );
@@ -136,11 +150,11 @@ class _CommunityPageState extends State<CommunityPage> {
         itemBuilder: (context, index) {
           final reversedIndex = postList.length - 1 - index;
           return Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
+                color: Color(0xffE0E0E0),
               ),
               margin: const EdgeInsets.symmetric(vertical: 5),
               padding: EdgeInsets.symmetric(vertical: 8.0),
@@ -151,8 +165,12 @@ class _CommunityPageState extends State<CommunityPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        header("${postList[reversedIndex]['name']}",
-                            "${postList[reversedIndex]['date']}"),
+                        header(
+                          "${postList[reversedIndex]['question']}",
+                          "${postList[reversedIndex]['name']}",
+                          "${postList[reversedIndex]['date']}",
+                          postList[reversedIndex]['user'],
+                        ),
                         const SizedBox(
                           height: 5,
                         ),
@@ -161,15 +179,20 @@ class _CommunityPageState extends State<CommunityPage> {
                       ],
                     ),
                   ),
-                  Image.asset("assets/img_otp.png"),
                   const Divider(),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: commentButton(
-                          postList[reversedIndex]['id'],
-                          postList[reversedIndex]['question'],
-                          postList[reversedIndex]['name'],
-                          postList[reversedIndex]['date']))
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: commentButton(
+                            postList[reversedIndex]['id'],
+                            postList[reversedIndex]['question'],
+                            postList[reversedIndex]['name'],
+                            postList[reversedIndex]['date'],
+                          )),
+                    ],
+                  )
                 ],
               ),
             ),
@@ -179,13 +202,13 @@ class _CommunityPageState extends State<CommunityPage> {
     );
   }
 
-  Widget header(String name, String date) {
+  Widget header(String question, String name, String date, int user) {
     return Row(
       children: [
         Container(
             padding: const EdgeInsets.all(4),
             decoration: const BoxDecoration(
-                color: Colors.green, shape: BoxShape.circle),
+                color: Color(0xff3AAA94), shape: BoxShape.circle),
             child: const Icon(Icons.person)),
         const SizedBox(
           width: 8,
@@ -206,425 +229,48 @@ class _CommunityPageState extends State<CommunityPage> {
             ],
           ),
         ),
-        IconButton(
-            onPressed: () {
-              // ignore: avoid_print
-              print("object");
-            },
-            icon: const Icon(Icons.more_horiz))
+        userID == user
+            ? IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UpdatePost(
+                                question: question,
+                              )));
+                },
+                icon: const Icon(Icons.edit_note))
+            : Text("")
       ],
-    );
-  }
-
-  Widget postState() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            const SizedBox(width: 190),
-            const Text(
-              "23 comment",
-              style: TextStyle(color: Colors.grey),
-            ),
-          ],
-        ),
-        const Divider(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [],
-        )
-      ],
-    );
-  }
-
-  Widget likeButton() {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        height: 25,
-        child: const Row(
-          children: [
-            Icon(
-              Icons.thumb_up_alt_outlined,
-              color: Colors.grey,
-              size: 20,
-            ),
-            SizedBox(
-              width: 5,
-            ),
-            Text("LIKE")
-          ],
-        ),
-      ),
     );
   }
 
   Widget commentButton(int id, String question, String name, String date) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Comment(
-                      id: id,
-                      question: question,
-                      name: question,
-                      date: date,
-                    )));
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        height: 25,
-        child: const Row(
-          children: [
-            Icon(
-              Icons.add_comment,
-              color: Colors.grey,
-              size: 20,
-            ),
-            SizedBox(
-              width: 5,
-            ),
-            Text("Comment")
-          ],
+    return SizedBox(
+      width: 120,
+      height: 30,
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Comment(
+                        id: id,
+                        question: question,
+                        name: name,
+                        date: date,
+                      )));
+        },
+        style: ElevatedButton.styleFrom(
+            backgroundColor: ButtonColor.bgcolor,
+            fixedSize: const Size(80, 10),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40))),
+        child: const Text(
+          'ความคิดเห็น',
+          style: TextStyle(color: Colors.white),
         ),
       ),
-    );
-  }
-
-  Widget commuTile() {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: postList.length.clamp(0, 6),
-        itemBuilder: (context, int index) {
-          final reversedIndex = postList.length - 1 - index;
-          return Padding(
-            padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(
-                    left: 20,
-                    right: 20,
-                  ),
-                  padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
-                  decoration: const BoxDecoration(
-                    color: Color(0xffE6E6E6),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            'assets/user.png',
-                            width: 40,
-                            height: 40,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text("${postList[reversedIndex]['name']}"),
-                              Text(
-                                "${postList[reversedIndex]['date']}",
-                                style: TextStyle(
-                                    color: Colors.grey[600], fontSize: 12),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            width: 60,
-                          ),
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.edit_note,
-                                size: 30,
-                              ))
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 500,
-                  height: 100,
-                  margin: EdgeInsets.only(
-                    left: 20,
-                    right: 20,
-                  ),
-                  padding: EdgeInsets.only(left: 12, right: 12),
-                  decoration: BoxDecoration(
-                    color: Color(0xffE6E6E6),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${postList[reversedIndex]['question']},",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(right: 20, left: 20, bottom: 20),
-                  child: Container(
-                    width: 500,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(8),
-                        bottomRight: Radius.circular(8),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: ButtonColor.bgcolor,
-                                  fixedSize: const Size(140, 10),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50))),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Comment(
-                                              id: postList[reversedIndex]['id'],
-                                              question: postList[reversedIndex]
-                                                  ['question'],
-                                              name: postList[reversedIndex]
-                                                  ['name'],
-                                              date: postList[reversedIndex]
-                                                  ['date'],
-                                            )));
-                              },
-                              child: Text(
-                                "ความคิดเห็น",
-                                style: TextStyle(color: Colors.white),
-                              ))
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Future<void> _dialogBuilder(BuildContext context) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.only(left: 20, right: 20, top: 20),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12))),
-          title: Center(
-            child: const Text(
-              'คุณต้องการถามอะไร',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ),
-          content: Container(
-            width: 320,
-            height: 150,
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: TextField(
-                autofocus: true,
-                controller: q,
-                cursorColor: Colors.grey,
-                style: TextStyle(color: Colors.black54, fontSize: 16),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                ),
-                showCursor: true,
-                maxLines: 5,
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('ยกเลิก'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('โพสต์'),
-              onPressed: () {
-                addQuestion();
-                q.clear();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _Comment(
-    BuildContext context,
-    int id,
-    String q,
-    String name,
-    String date,
-  ) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.only(left: 16, right: 16, top: 16),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12))),
-          title: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                height: 60,
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    topRight: Radius.circular(8),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.asset(
-                                  'assets/user.png',
-                                  width: 40,
-                                  height: 40,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      name,
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                    Text(
-                                      date,
-                                      style: TextStyle(
-                                          color: Colors.grey[600],
-                                          fontSize: 12),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                  height: 60,
-                  width: 300,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(8),
-                      bottomRight: Radius.circular(8),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Text(q, style: TextStyle(fontSize: 14)),
-                  ))
-            ],
-          ),
-          content: Column(
-            children: [
-              comentItem.isEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.only(left: 70),
-                      child: Text("ยังไม่มีความคิดเห็น"),
-                    )
-                  : ListView.builder(
-                      itemCount: postList.length.clamp(0, 6),
-                      itemBuilder: (context, int index) {
-                        final reversedIndex = postList.length - 1 - index;
-                        return Container(
-                          width: 320,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: Text(
-                              postList[reversedIndex]['name'],
-                            ),
-                          ),
-                        );
-                      }),
-              Container(
-                  width: 500,
-                  height: 100,
-                  decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Row(
-                    children: [
-                      TextField(),
-                    ],
-                  ))
-            ],
-          ),
-        );
-      },
     );
   }
 
