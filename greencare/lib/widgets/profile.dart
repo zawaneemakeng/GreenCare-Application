@@ -78,7 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           imageProfile(),
           SizedBox(
-            height: 15,
+            height: 10,
           ),
           profileInfo()
         ]),
@@ -302,14 +302,14 @@ class _ProfilePageState extends State<ProfilePage> {
             imageUrl: "http://${host()}${imageList[0]['profile_img']}",
             imageBuilder: (context, imageProvider) => Container(
               width: 130,
-              height: 130,
+              height: 160,
               decoration: BoxDecoration(
                 color: Colors.grey[300],
                 shape: BoxShape.circle,
                 image: DecorationImage(image: imageProvider, fit: BoxFit.fill),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(left: 55, top: 80),
+                padding: const EdgeInsets.only(left: 50, top: 70),
                 child: showDialogPhoto(),
               ),
             ),
@@ -324,21 +324,17 @@ class _ProfilePageState extends State<ProfilePage> {
       child: Stack(children: <Widget>[
         Container(
             width: 130,
-            height: 130,
+            height: 150,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 0),
               shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 0),
+              color: Colors.grey[300],
             ),
             child: Padding(
               padding: const EdgeInsets.all(4),
               child: Lottie.asset('assets/animations/animation_lkuv6jxa.json',
                   width: 35, height: 35),
             )),
-        Positioned(
-          height: 180,
-          width: 200,
-          child: showDialogPhoto(),
-        )
       ]),
     );
   }
