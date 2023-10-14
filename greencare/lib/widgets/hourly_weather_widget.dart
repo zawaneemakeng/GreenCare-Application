@@ -27,8 +27,8 @@ class _HourlyDataWidgetState extends State<HourlyDataWidget> {
         Container(
           margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
           alignment: Alignment.topCenter,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 8, bottom: 14),
+          child: const Padding(
+            padding: EdgeInsets.only(top: 8, bottom: 14),
             child: Text(
               "สภาพอากาศวันนี้",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -93,6 +93,7 @@ class _HourlyDataWidgetState extends State<HourlyDataWidget> {
   }
 }
 
+// ignore: must_be_immutable
 class HourlyDetails extends StatelessWidget {
   double temp;
   int time;
@@ -117,28 +118,23 @@ class HourlyDetails extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Container(
-          child: Text(getTime(time) + ' น.',
-              style: TextStyle(
-                color: cardIndex == index
-                    ? Colors.white
-                    : CustomColors.textColorBlack,
-              )),
+        Text(getTime(time) + ' น.',
+            style: TextStyle(
+              color: cardIndex == index
+                  ? Colors.white
+                  : CustomColors.textColorBlack,
+            )),
+        Image.asset(
+          "assets/weather/$weatherIcon.png",
+          height: 40,
+          width: 40,
         ),
-        Container(
-          child: Image.asset(
-            "assets/weather/$weatherIcon.png",
-            height: 40,
-            width: 40,
-          ),
-        ),
-        Container(
-            child: Text("$temp °",
-                style: TextStyle(
-                  color: cardIndex == index
-                      ? Colors.white
-                      : CustomColors.textColorBlack,
-                ))),
+        Text("$temp °",
+            style: TextStyle(
+              color: cardIndex == index
+                  ? Colors.white
+                  : CustomColors.textColorBlack,
+            )),
       ],
     );
   }
