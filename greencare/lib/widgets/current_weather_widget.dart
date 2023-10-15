@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:rotnaam/model/weather_data_current.dart';
 
 class CurrentWeatherWidget extends StatelessWidget {
-  double water_level = 70.7;
   final WeatherDataCurrent weatherDataCurrent;
-  CurrentWeatherWidget({Key? key, required this.weatherDataCurrent})
+  const CurrentWeatherWidget({Key? key, required this.weatherDataCurrent})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SoilTempWidget(),
+        soilTempWidget(),
         const SizedBox(
           height: 10,
         ),
@@ -21,7 +18,7 @@ class CurrentWeatherWidget extends StatelessWidget {
     );
   }
 
-  Widget SoilTempWidget() {
+  Widget soilTempWidget() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -31,7 +28,9 @@ class CurrentWeatherWidget extends StatelessWidget {
           width: 80,
         ),
         Container(
-            height: 50, width: 1, color: Color.fromARGB(255, 130, 130, 130)),
+            height: 50,
+            width: 1,
+            color: const Color.fromARGB(255, 130, 130, 130)),
         RichText(
             text: TextSpan(children: [
           TextSpan(
