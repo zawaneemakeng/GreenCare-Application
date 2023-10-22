@@ -12,7 +12,8 @@ import 'package:lottie/lottie.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  final int userID;
+  const ProfilePage({super.key, required this.userID});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -23,10 +24,9 @@ class _ProfilePageState extends State<ProfilePage> {
   File? selectedImage;
   List imageList = [];
   String fileName = "";
-  String getlast_img = "";
   List profilelist = [""];
-  int? userID;
-  int? IDimg;
+  int? _userID;
+  int? idImg;
   String? fulldate;
   String? first_name;
   String? b_date = "";
@@ -48,8 +48,8 @@ class _ProfilePageState extends State<ProfilePage> {
   ];
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _userID = widget.userID;
     check();
   }
 
@@ -62,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 15, top: 20),
+                padding: const EdgeInsets.only(left: 15, top: 15),
                 child: IconButton(
                   icon: Image.asset('assets/back.png', height: 35, width: 35),
                   iconSize: 50,
@@ -70,14 +70,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (BuildContext context) => HomePage()));
+                            builder: (BuildContext context) =>
+                                const HomePage()));
                   },
                 ),
               ),
             ],
           ),
           imageProfile(),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           profileInfo()
@@ -93,11 +94,11 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Container(
               height: 400,
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 255, 255, 255),
+                color: Colors.white,
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
                 boxShadow: [
                   BoxShadow(
-                    color: Color.fromARGB(255, 255, 255, 255).withAlpha(0),
+                    color: Colors.white.withAlpha(0),
                     spreadRadius: 0,
                     blurRadius: 5,
                     offset: const Offset(0.5, 0),
@@ -109,8 +110,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 15),
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 15),
                         child: Text(
                           'โปรไฟลของคุณ',
                           style: TextStyle(
@@ -124,13 +125,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: TextField(
                               // controller: email,
                               cursorColor: Colors.grey,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black54,
                               ),
                               decoration: InputDecoration(
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.email,
-                                  color: Color.fromARGB(255, 133, 133, 133),
+                                  color: Colors.teal,
                                 ),
                                 hintText: first_name,
                                 border: InputBorder.none,
@@ -139,8 +140,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10),
                         child: Divider(
                           height: 1,
                           color: Colors.grey,
@@ -156,15 +157,15 @@ class _ProfilePageState extends State<ProfilePage> {
                               // controller: password,
                               obscureText: true,
                               cursorColor: Colors.grey,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black54,
                               ),
                               decoration: InputDecoration(
-                                prefixIcon: Icon(
+                                prefixIcon: const Icon(
                                   Icons.phone,
-                                  color: Color.fromARGB(255, 93, 93, 93),
+                                  color: Colors.teal,
                                 ),
-                                hintText: "เบอร์โทร ${p_number}",
+                                hintText: "เบอร์โทร $p_number",
                                 border: InputBorder.none,
                               ),
                             ),
@@ -192,21 +193,20 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Row(
                           children: [
                             Container(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 12),
+                              child: const Padding(
+                                padding: EdgeInsets.only(left: 12),
                                 child: Icon(
                                   Icons.date_range,
                                   size: 24.0,
-                                  // color: Colors.grey[700],
-                                  color: Colors.grey,
+                                  color: Colors.teal,
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 12.0,
                             ),
                             Text(
-                              "วันเกิด ${b_date}",
+                              "วันเกิด $b_date",
                               style: TextStyle(
                                 fontSize: 16.0,
                                 color: Colors.grey[700],
@@ -231,7 +231,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xff3AAA94),
-                              fixedSize: const Size(130, 20),
+                              fixedSize: const Size(200, 20),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(50))),
                           child: const Text(
@@ -264,8 +264,8 @@ class _ProfilePageState extends State<ProfilePage> {
       var f_name = pref.getString('first_name');
       first_name = f_name;
       var username = pref.getInt('user');
-      userID = username;
-      print(userID);
+      _userID = username;
+      print(_userID);
       Future.delayed(const Duration(seconds: 1), () {
         getImage();
         getProfile();
@@ -274,18 +274,17 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future getImage() async {
-    var url = Uri.http(host(), '/media/profile/${userID}/');
+    var url = Uri.http(host(), '/media/profile/${_userID}/');
     var response = await http.get(url);
     var result = utf8.decode(response.bodyBytes);
     setState(() {
       imageList = json.decode(result);
-      print(imageList);
-      IDimg = imageList[0]['id'];
+      idImg = imageList[0]['id'];
     });
   }
 
   Future getProfile() async {
-    var url = Uri.http(host(), '/media/profile/${userID}/');
+    var url = Uri.http(host(), '/media/profile/$_userID/');
     var response = await http.get(url);
     var result = utf8.decode(response.bodyBytes);
     setState(() {
@@ -301,15 +300,23 @@ class _ProfilePageState extends State<ProfilePage> {
         ? CachedNetworkImage(
             imageUrl: "http://${host()}${imageList[0]['profile_img']}",
             imageBuilder: (context, imageProvider) => Container(
-              width: 130,
+              width: 160,
               height: 160,
               decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade400.withAlpha(90),
+                    spreadRadius: 0,
+                    blurRadius: 20,
+                    offset: const Offset(20, 10),
+                  ),
+                ],
                 color: Colors.grey[300],
                 shape: BoxShape.circle,
-                image: DecorationImage(image: imageProvider, fit: BoxFit.fill),
+                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(left: 50, top: 70),
+                padding: const EdgeInsets.only(left: 80, top: 90),
                 child: showDialogPhoto(),
               ),
             ),
@@ -350,7 +357,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future uploadImage() async {
     final request = http.MultipartRequest(
-        'PATCH', Uri.parse("http://${host()}/update/profile/${IDimg}/"));
+        'PATCH', Uri.parse("http://${host()}/update/profile/$idImg/"));
     final headers = {"Content-type": "application/json"};
     request.files.add(http.MultipartFile('profile_img',
         selectedImage!.readAsBytes().asStream(), selectedImage!.lengthSync(),
@@ -369,55 +376,52 @@ class _ProfilePageState extends State<ProfilePage> {
       onPressed: () => showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(16.0))),
-          surfaceTintColor: Color(0xff3AAA94),
+          surfaceTintColor: Colors.teal,
           backgroundColor: Colors.white,
-          content: Padding(
-            padding: const EdgeInsets.only(top: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  height: 80,
-                  width: 60,
-                  child: Column(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          _getImage(ImageSource.camera);
-                        },
-                        icon: Icon(Icons.camera_alt,
-                            size: 28, color: Colors.grey[700]),
-                      ),
-                      Text(
-                        "กล้อง",
-                        style: TextStyle(color: Colors.grey[700], fontSize: 14),
-                      ),
-                    ],
-                  ),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                height: 80,
+                width: 60,
+                child: Column(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        _getImage(ImageSource.camera);
+                      },
+                      icon: Icon(Icons.camera_alt,
+                          size: 28, color: Colors.grey[700]),
+                    ),
+                    Text(
+                      "กล้อง",
+                      style: TextStyle(color: Colors.grey[700], fontSize: 14),
+                    ),
+                  ],
                 ),
-                Container(
-                  height: 80,
-                  width: 60,
-                  child: Column(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          _getImage(ImageSource.gallery);
-                        },
-                        icon: Icon(Icons.photo_sharp,
-                            size: 28, color: Colors.grey[700]),
-                      ),
-                      Text(
-                        "แกลลอรี่",
-                        style: TextStyle(color: Colors.grey[700], fontSize: 14),
-                      ),
-                    ],
-                  ),
+              ),
+              Container(
+                height: 80,
+                width: 60,
+                child: Column(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        _getImage(ImageSource.gallery);
+                      },
+                      icon: Icon(Icons.photo_sharp,
+                          size: 28, color: Colors.grey[700]),
+                    ),
+                    Text(
+                      "แกลลอรี่",
+                      style: TextStyle(color: Colors.grey[700], fontSize: 14),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           actions: <Widget>[
             TextButton(
@@ -438,13 +442,16 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showRoundedDatePicker(
       context: context,
-      locale: Locale("th", "TH"),
+      locale: const Locale("th", "TH"),
       era: EraMode.BUDDHIST_YEAR,
       initialDate: selectedDate,
       firstDate: DateTime(2017, 1),
       lastDate: DateTime(2037),
       borderRadius: 15,
-      theme: ThemeData(primaryColor: const Color(0xff3AAA94), fontFamily: 'PK'),
+      theme: ThemeData(
+        primarySwatch: Colors.teal,
+        fontFamily: 'PK',
+      ),
     );
     if (picked != null && picked != selectedDate) {
       setState(() {
