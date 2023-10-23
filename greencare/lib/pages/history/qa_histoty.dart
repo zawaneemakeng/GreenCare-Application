@@ -6,6 +6,7 @@ import 'package:rotnaam/utils/api_url.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
 
 class QAHistory extends StatefulWidget {
   final userid;
@@ -18,6 +19,7 @@ class QAHistory extends StatefulWidget {
 class _QAHistoryState extends State<QAHistory> {
   int? userID;
   List postItem = [];
+
   // mark_chat_unread_rounded
   @override
   void initState() {
@@ -88,6 +90,7 @@ class _QAHistoryState extends State<QAHistory> {
                           "${postItem[reversedIndex]['name']}",
                           "${postItem[reversedIndex]['date']}",
                           postItem[reversedIndex]['user'],
+                          postItem[reversedIndex]['profile_img'],
                         ),
                         const SizedBox(
                           height: 10,
@@ -107,11 +110,11 @@ class _QAHistoryState extends State<QAHistory> {
                       Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           child: commentButton(
-                            postItem[reversedIndex]['id'],
-                            postItem[reversedIndex]['question'],
-                            postItem[reversedIndex]['name'],
-                            postItem[reversedIndex]['date'],
-                          )),
+                              postItem[reversedIndex]['id'],
+                              postItem[reversedIndex]['question'],
+                              postItem[reversedIndex]['name'],
+                              postItem[reversedIndex]['date'],
+                              "${postItem[reversedIndex]['profile_img']}")),
                     ],
                   )
                 ],
@@ -123,14 +126,26 @@ class _QAHistoryState extends State<QAHistory> {
     );
   }
 
-  Widget header(int id, String question, String name, String date, int user) {
+  Widget header(int id, String question, String name, String date, int user,
+      String profile) {
     return Row(
       children: [
-        Container(
-            padding: const EdgeInsets.all(4),
-            decoration: const BoxDecoration(
-                color: Color(0xff3AAA94), shape: BoxShape.circle),
-            child: const Icon(Icons.person)),
+        profile.isNotEmpty
+            ? Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: NetworkImage("http://${host()}$profile"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              )
+            : Center(
+                child: Lottie.asset('assets/animations/animation_lkuv6jxa.json',
+                    width: 120, height: 120),
+              ),
         const SizedBox(
           width: 8,
         ),
@@ -193,7 +208,8 @@ class _QAHistoryState extends State<QAHistory> {
     );
   }
 
-  Widget commentButton(int id, String question, String name, String date) {
+  Widget commentButton(
+      int id, String question, String name, String date, String profile) {
     return SizedBox(
       width: 120,
       height: 30,
@@ -207,6 +223,7 @@ class _QAHistoryState extends State<QAHistory> {
                         question: question,
                         name: name,
                         date: date,
+                        profilePost: profile,
                       )));
         },
         style: ElevatedButton.styleFrom(

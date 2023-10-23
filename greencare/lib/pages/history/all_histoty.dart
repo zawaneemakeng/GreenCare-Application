@@ -15,6 +15,7 @@ class AllHistory extends StatefulWidget {
 class _AllHistoryState extends State<AllHistory> {
   int? userID;
   List history = ['ประวัติการปลูก', 'ประวัติการเงิน', 'ประวัติการโพสต์'];
+  String? profileImg;
 
   @override
   void initState() {
@@ -137,16 +138,19 @@ class _AllHistoryState extends State<AllHistory> {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     final checkvalue = pref.get('user') ?? 0;
     if (checkvalue != 0) {
-      getUsername();
+      getUsernameProfile();
     }
   }
 
-  void getUsername() async {
+  void getUsernameProfile() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       var username = pref.getInt('user');
       userID = username;
-      print(userID);
+      var profile = pref.getString('profile_img');
+      profileImg = profile;
+      print(profileImg);
+      ;
     });
   }
 }
