@@ -16,7 +16,7 @@ from .serializers import *
 def get_soilmoisture(request,PID):
     try:
             check_soil = SoilMoisture.objects.filter(plant_id=PID)
-            serializer = SoilMoistureSerializer(check_soil,many=True)
+            serializer = SoilMoistureSerializer(check_soil.last())
             print(serializer.data)
             return Response(serializer.data,status=status.HTTP_200_OK)
     except:
@@ -52,7 +52,7 @@ def post_waterlevel(requset):
 def get_waterlevel(request,PID):
     try:
             check_water = WaterLevel.objects.filter(plant_id=PID)
-            serializer = WaterLevelSerializer(check_water,many=True)
+            serializer = WaterLevelSerializer(check_water.last())
             print(serializer.data)
             return Response(serializer.data,status=status.HTTP_200_OK)
     except:
@@ -64,7 +64,7 @@ def get_waterlevel(request,PID):
 def post_waterplant(requset):
     print("POST DATA From ESP32")
     if requset.method =='POST':
-        ser = WaterPlantSerializer(data = requset.data)
+        ser = WateringPlantSerializer(data = requset.data)
         if ser.is_valid():
             ser.save()
             return Response(ser.data,status=status.HTTP_201_CREATED)
@@ -81,10 +81,21 @@ def post_ledplant(requset):
         return Response(ser.errors,status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(['GET'])
-def get_ledplant(request):
+def get_ledplant(request,PID):
      try:
-            all_question = LEDPlant.objects.all()
-            serializer = LEDPlantSerializer(all_question,many=True)
+            check = LEDPlant.objects.filter(plant_id = PID)
+            serializer = LEDPlantSerializer(check.last())
+            return Response(serializer.data,status=status.HTTP_200_OK)
+     except:
+            dt = {'status': 'otp-failed'}
+            print('failed ไม่มี',dt)
+            return Response(data=dt,status=status.HTTP_400_BAD_REQUEST)
+     
+@api_view(['GET'])
+def get_wateringplant(request,PID):
+     try:
+            check = WateringPlant.objects.filter(plant_id = PID)
+            serializer = WateringPlantSerializer(check.last())
             return Response(serializer.data,status=status.HTTP_200_OK)
      except:
             dt = {'status': 'otp-failed'}
