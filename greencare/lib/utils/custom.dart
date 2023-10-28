@@ -18,10 +18,13 @@ class SnackBarColor {
 
 class FontCustom {
   static const size = TextStyle(fontSize: 12);
-
   static const bgcolor = Color(0xff3AAA94);
 }
 
 class IconColor {
   static const color = Color(0xff858585);
+}
+
+class BoxColor {
+  static const color = Color(0xffE6E6E6);
 }
