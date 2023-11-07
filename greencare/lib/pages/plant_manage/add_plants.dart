@@ -412,10 +412,10 @@ class _AddPlantsState extends State<AddPlants> {
     setState(() {
       setSoilmoisture(plantid);
       setWaterlevel(plantid);
-      // toDevicePlant(id);
-      // setMoiture(moiture.text);
-      // setStartTime("${starttime.hour}${starttime.minute}");
-      // setEndTime("${endtime.hour}${endtime.minute}");
+      setPlant(plantid);
+      setMoiture(double.parse(moiture.text));
+      setStartTime("${starttime.hour}${starttime.minute}");
+      setEndTime("${endtime.hour}${endtime.minute}");
       Navigator.pop(context, 'refresh');
     });
   }
@@ -436,14 +436,14 @@ class _AddPlantsState extends State<AddPlants> {
     print(response.body);
   }
 
-  Future toDevicePlant(int pid) async {
+  Future setPlant(int pid) async {
     var url = Uri.http(urlDevice(), '/plant-id:$pid');
     Map<String, String> header = {"Content-type": "application/json"};
     var response = await http.post(url, headers: header);
     print(response.body);
   }
 
-  Future setMoiture(setmoiture) async {
+  Future setMoiture(double setmoiture) async {
     var url = Uri.http(urlDevice(), '/setmoiture:$setmoiture');
     Map<String, String> header = {"Content-type": "application/json"};
     var response = await http.post(url, headers: header);
@@ -458,7 +458,7 @@ class _AddPlantsState extends State<AddPlants> {
   }
 
   Future setEndTime(endtime) async {
-    var url = Uri.http(urlDevice(), '/endtime:$endtime}');
+    var url = Uri.http(urlDevice(), '/endtime:$endtime');
     Map<String, String> header = {"Content-type": "application/json"};
     var response = await http.post(url, headers: header);
     print(response.body);

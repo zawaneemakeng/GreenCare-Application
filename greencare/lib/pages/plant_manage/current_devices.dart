@@ -39,7 +39,8 @@ class _CurrentDevicesState extends State<CurrentDevices> {
     super.initState();
     getWaterlevel();
     getSoil();
-    // _startTimer();
+    setNoti();
+    _startTimer();
   }
 
   @override
@@ -103,7 +104,7 @@ class _CurrentDevicesState extends State<CurrentDevices> {
                     ),
                     const Text(
                       'ความชื้นในดิน',
-                      style: TextStyle(fontSize: 12),
+                      style: TextStyle(fontSize: 10),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -147,7 +148,7 @@ class _CurrentDevicesState extends State<CurrentDevices> {
                     ),
                     const Text(
                       'น้ำคงเหลือในเเทงค์',
-                      style: TextStyle(fontSize: 12),
+                      style: TextStyle(fontSize: 10),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -179,12 +180,20 @@ class _CurrentDevicesState extends State<CurrentDevices> {
     setState(() {
       waterlevelItem = json.decode(result);
       waterlevel = double.parse(waterlevelItem['water_remaining']);
-      // if (waterlevel! < 20) {
-      //   LocalNotification.showBigTextNotification(
-      //       title: "hi",
-      //       body: "It's me again",
-      //       flutterLocalNotificationsPlugin: flutterLocalNotificationsPlugin);
-      // }
+    });
+  }
+
+  void setNoti() {
+    const duration = Duration(minutes: 1);
+    timer = Timer.periodic(duration, (timer) {
+      setState(() {
+        if (waterlevel! < 20) {
+          LocalNotification.showBigTextNotification(
+              title: "hi",
+              body: "It's me again",
+              flutterLocalNotificationsPlugin: flutterLocalNotificationsPlugin);
+        }
+      });
     });
   }
 }
