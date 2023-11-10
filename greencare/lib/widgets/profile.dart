@@ -20,32 +20,15 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  DateTime selectedDate = DateTime.now();
   File? selectedImage;
-  List imageList = [];
-  String fileName = "";
-  List profilelist = [""];
+  Map<String, dynamic> profile = {};
   int? _userID;
-  int? idImg;
-  String? fulldate;
+  int? profile_id;
   String? first_name;
-  String? b_date = "";
+  String? job = "";
   String? p_number = "";
+  String? current_img = "";
 
-  List<String> months = [
-    "ม.ค.",
-    "ก.พ.",
-    "มี.ค.",
-    "เม.ย.",
-    "พ.ค.",
-    "มิ.ย.",
-    "ก.ค.",
-    "ส.ค.",
-    "ก.ย.",
-    "ต.ค.",
-    "พ.ย.",
-    "ธ.ค."
-  ];
   @override
   void initState() {
     super.initState();
@@ -88,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget profileInfo() {
-    return profilelist.isNotEmpty
+    return profile.isNotEmpty
         ? Padding(
             padding: const EdgeInsets.all(20.0),
             child: Container(
@@ -154,8 +137,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             width: 285,
                             child: TextField(
                               keyboardType: TextInputType.number,
-                              // controller: password,
-                              obscureText: true,
                               cursorColor: Colors.grey,
                               style: const TextStyle(
                                 color: Colors.black54,
@@ -180,40 +161,29 @@ class _ProfilePageState extends State<ProfilePage> {
                           thickness: 1,
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          _selectDate(context);
-                          FocusScope.of(context).unfocus();
-                        },
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all(
-                            EdgeInsets.zero,
+                      Row(
+                        children: [
+                          Container(
+                            child: const Padding(
+                              padding: EdgeInsets.only(left: 12),
+                              child: Icon(
+                                Icons.date_range,
+                                size: 24.0,
+                                color: Colors.teal,
+                              ),
+                            ),
                           ),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              child: const Padding(
-                                padding: EdgeInsets.only(left: 12),
-                                child: Icon(
-                                  Icons.date_range,
-                                  size: 24.0,
-                                  color: Colors.teal,
-                                ),
-                              ),
+                          const SizedBox(
+                            width: 12.0,
+                          ),
+                          Text(
+                            "อาชีพ $job",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.grey[700],
                             ),
-                            const SizedBox(
-                              width: 12.0,
-                            ),
-                            Text(
-                              "วันเกิด $b_date",
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                color: Colors.grey[700],
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                       const Padding(
                         padding: EdgeInsets.only(left: 10, right: 10),
@@ -230,7 +200,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             //
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xff3AAA94),
+                              backgroundColor: Colors.teal,
                               fixedSize: const Size(200, 20),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(50))),
@@ -250,55 +220,10 @@ class _ProfilePageState extends State<ProfilePage> {
           );
   }
 
-  void check() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    final checkvalue = pref.get('user') ?? 0;
-    if (checkvalue != 0) {
-      getUsername();
-    }
-  }
-
-  void getUsername() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    setState(() {
-      var f_name = pref.getString('first_name');
-      first_name = f_name;
-      var username = pref.getInt('user');
-      _userID = username;
-      print(_userID);
-      Future.delayed(const Duration(seconds: 1), () {
-        getImage();
-        getProfile();
-      });
-    });
-  }
-
-  Future getImage() async {
-    var url = Uri.http(host(), '/media/profile/${_userID}/');
-    var response = await http.get(url);
-    var result = utf8.decode(response.bodyBytes);
-    setState(() {
-      imageList = json.decode(result);
-      idImg = imageList[0]['id'];
-    });
-  }
-
-  Future getProfile() async {
-    var url = Uri.http(host(), '/media/profile/$_userID/');
-    var response = await http.get(url);
-    var result = utf8.decode(response.bodyBytes);
-    setState(() {
-      profilelist = json.decode(result);
-      print(profilelist);
-      p_number = profilelist[0]['phone_number'];
-      b_date = profilelist[0]['birthdate'];
-    });
-  }
-
   Widget imageProfile() {
-    return imageList.isNotEmpty
+    return profile.isNotEmpty
         ? CachedNetworkImage(
-            imageUrl: "http://${host()}${imageList[0]['profile_img']}",
+            imageUrl: "http://${host()}${profile['profile_img']}",
             imageBuilder: (context, imageProvider) => Container(
               width: 160,
               height: 160,
@@ -346,6 +271,20 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  Future getProfile() async {
+    var url = Uri.http(host(), '/media/profile/$_userID/');
+    var response = await http.get(url);
+    var result = utf8.decode(response.bodyBytes);
+    setState(() {
+      profile = json.decode(result);
+      profile_id = profile['id'];
+      p_number = profile['phone_number'];
+      job = profile['job'];
+      current_img = profile['profile_img'];
+      setnewImg();
+    });
+  }
+
   Future _getImage(ImageSource source) async {
     final image = await ImagePicker().pickImage(source: source);
     selectedImage = File(image!.path);
@@ -357,7 +296,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future uploadImage() async {
     final request = http.MultipartRequest(
-        'PATCH', Uri.parse("http://${host()}/update/profile/$idImg/"));
+        'PATCH', Uri.parse("http://${host()}/update/profile/$profile_id/"));
     final headers = {"Content-type": "application/json"};
     request.files.add(http.MultipartFile('profile_img',
         selectedImage!.readAsBytes().asStream(), selectedImage!.lengthSync(),
@@ -366,8 +305,8 @@ class _ProfilePageState extends State<ProfilePage> {
     final response = await request.send();
     print(response);
     setState(() {
+      getProfile();
       Navigator.pop(context);
-      getImage();
     });
   }
 
@@ -439,24 +378,29 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showRoundedDatePicker(
-      context: context,
-      locale: const Locale("th", "TH"),
-      era: EraMode.BUDDHIST_YEAR,
-      initialDate: selectedDate,
-      firstDate: DateTime(2017, 1),
-      lastDate: DateTime(2037),
-      borderRadius: 15,
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-        fontFamily: 'PK',
-      ),
-    );
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
+  void check() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    final checkvalue = pref.get('user') ?? 0;
+    if (checkvalue != 0) {
+      getUsername();
     }
+  }
+
+  void getUsername() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(
+      () {
+        var f_name = pref.getString('first_name');
+        first_name = f_name;
+        var username = pref.getInt('user');
+        _userID = username;
+        getProfile();
+      },
+    );
+  }
+
+  void setnewImg() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString('profile_img', current_img!);
   }
 }
