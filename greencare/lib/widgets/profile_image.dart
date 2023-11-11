@@ -180,8 +180,8 @@ class _ProfilePageState extends State<ProfilePage> {
     final response = await request.send();
     print(response);
     setState(() {
-      Navigator.pop(context);
       getImage();
+      Navigator.pop(context);
     });
   }
 

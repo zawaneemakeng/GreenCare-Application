@@ -66,7 +66,7 @@ class _ArticleState extends State<Article> {
             decoration: BoxDecoration(
               image: DecorationImage(
                   colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.5), BlendMode.hardLight),
+                      Colors.black.withOpacity(0.6), BlendMode.hardLight),
                   image: NetworkImage(
                       "http://${host()}/${articleItems[index]['article_img']}"),
                   fit: BoxFit.cover),
